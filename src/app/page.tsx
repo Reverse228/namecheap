@@ -7,7 +7,7 @@ export default function Home() {
   const route = useRouter();
 
   useEffect(() => {
-    route.push("/trade");
+    route.push("/assets");
   }, []);
 
   return <div></div>;
