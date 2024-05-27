@@ -1,0 +1,13 @@
+html {
+  background-color: #0e1424;
+}
+
+html * {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}

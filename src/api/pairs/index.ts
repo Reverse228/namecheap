@@ -1,0 +1,1 @@
+export { GetPairs } from "./getPairs";
