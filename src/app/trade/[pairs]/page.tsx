@@ -6,9 +6,10 @@ import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 
 import * as S from "./styled";
 import Pair from "@src/components/Pair/Pair";
+import Button from "@src/components/Button/Button";
 
 const Trade = ({ params }: { params: { pairs: string } }) => {
-  const { isLoadingPage, router } = useTrade();
+  const { isLoadingPage, router, userData } = useTrade();
 
   return (
     <MainWrapper
@@ -18,25 +19,40 @@ const Trade = ({ params }: { params: { pairs: string } }) => {
       addHeader
       $gap="24px"
     >
-      <Pair
-        quoteCurrency={params.pairs.split("-")[0]}
-        baseCurrency={params.pairs.split("-")[1]}
-      />
+      {
+        <Pair
+          disableButtons={typeof userData === "string" || !userData}
+          quoteCurrency={params.pairs.split("-")[0]}
+          baseCurrency={params.pairs.split("-")[1]}
+        />
+      }
 
-      <S.Graph>
-        {isLoadingPage && (
-          <AdvancedRealTimeChart
-            theme="dark"
-            hide_side_toolbar
-            autosize
-            copyrightStyles={{
-              parent: { display: "none" },
-            }}
-            allow_symbol_change={false}
-            symbol={params.pairs.split("-").join("")}
-          />
-        )}
-      </S.Graph>
+      {userData && (
+        <S.Graph>
+          {typeof userData === "string" && (
+            <S.NoUser>
+              <Button label="Войти" onClick={() => router.push("/logIn")} />
+              <Button
+                label="Зарегестрироваться"
+                $variant="active"
+                onClick={() => router.push("/register")}
+              />
+            </S.NoUser>
+          )}
+          {isLoadingPage && (
+            <AdvancedRealTimeChart
+              theme="dark"
+              hide_side_toolbar
+              autosize
+              copyrightStyles={{
+                parent: { display: "none" },
+              }}
+              allow_symbol_change={false}
+              symbol={params.pairs.split("-").join("")}
+            />
+          )}
+        </S.Graph>
+      )}
     </MainWrapper>
   );
 };

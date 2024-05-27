@@ -42,7 +42,7 @@ export type MeUserApi = {
 };
 
 export const MeUser = async (
-  setData: (data: MeUserApi) => void,
+  setData: (data: MeUserApi | string) => void,
   params?: object
 ) => {
   try {
@@ -57,7 +57,7 @@ export const MeUser = async (
         },
       })
       .then(({ data }: { data: MeUserApi }) => setData(data));
-  } catch (e) {
-    return null;
+  } catch (e: any) {
+    setData(e.message);
   }
 };

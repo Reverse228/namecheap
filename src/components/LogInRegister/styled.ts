@@ -3,6 +3,7 @@ import MainWrapper from "../MainWrapper/MainWrapper";
 
 export const MainButton = styled.div`
   display: flex;
+  gap: 8px;
   justify-content: center;
 `;
 

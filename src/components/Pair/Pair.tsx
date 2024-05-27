@@ -5,22 +5,27 @@ import Typography from "../Typography/Typography";
 import SellSvg from "../../../public/svg/SellSvg";
 import BuySvg from "../../../public/svg/BuySvg";
 import SvgIcon from "../SvgIcon";
-import { useRouter } from "next/navigation";
+import { usePair } from "./hook";
 
 const Pair: FC<Props> = (props) => {
-  const { baseCurrency, quoteCurrency } = props;
+  const { baseCurrency, quoteCurrency, disableButtons } = props;
 
-  const router = useRouter();
+  const { router } = usePair();
 
   return (
     <S.Wrapper>
       <Typography $fontSize="18px">
         {quoteCurrency} / {baseCurrency}
       </Typography>
+
       <S.ButtonGroup>
         <S.Button
+          $disable={disableButtons}
           type="sell"
-          onClick={() => router.push(`/trade/${quoteCurrency}-${baseCurrency}`)}
+          onClick={() =>
+            !disableButtons &&
+            router.push(`/trade/${quoteCurrency}-${baseCurrency}`)
+          }
         >
           <S.TextIcons>
             <SvgIcon>
@@ -30,8 +35,12 @@ const Pair: FC<Props> = (props) => {
           </S.TextIcons>
         </S.Button>
         <S.Button
+          $disable={disableButtons}
           type="buy"
-          onClick={() => router.push(`/trade/${quoteCurrency}-${baseCurrency}`)}
+          onClick={() =>
+            !disableButtons &&
+            router.push(`/trade/${quoteCurrency}-${baseCurrency}`)
+          }
         >
           <S.TextIcons>
             <SvgIcon>

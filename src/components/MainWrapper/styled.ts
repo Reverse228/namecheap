@@ -27,8 +27,10 @@ export const Wrapper = styled.div<StyledProps>`
 `;
 
 export const TopLine = styled.div`
-  display: grid;
+  width: 100%;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
 `;
 

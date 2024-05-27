@@ -5,7 +5,9 @@ import { rgba } from "emotion-rgba";
 
 export const Graph = styled.div`
   width: 100%;
+  position: relative;
   min-height: 600px;
+  border-radius: 4px;
 `;
 
 export const ButtonGroup = styled.div`
@@ -39,4 +41,19 @@ export const TextIcons = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+`;
+
+export const NoUser = styled.div`
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  transform: scale(1.05);
+  position: absolute;
+  background: ${rgba(Theme.colors.darkBlue, 0.4)};
+  backdrop-filter: blur(10px);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 `;

@@ -34,7 +34,7 @@ export const TextField = styled.input`
   background: ${Theme.colors.paledBlue};
   transition: 0.2s;
   font-size: 16px;
-  border-radius: 2px;
+  border-radius: 4px;
   border: 0;
   border: 1px solid transparent;
   color: ${rgba(Theme.colors.white, 0.6)};

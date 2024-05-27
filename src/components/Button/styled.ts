@@ -6,9 +6,9 @@ import { css } from "@emotion/react";
 
 export const Wrapper = styled.div<StyledProps>`
   ${({ $maxWith, $variant, $disabled, $margin, $padding }) => css`
-    padding: ${$padding ?? `6px 16px`};
+    padding: ${$padding ?? `8px 16px`};
     width: ${$maxWith ? "100%" : "fit-content"};
-    border-radius: 2px;
+    border-radius: 4px;
     background: ${$variant === "simple"
       ? Theme.colors.blackBlue
       : Theme.colors.green};

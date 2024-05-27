@@ -17,8 +17,7 @@ const MainWrapper: FC<Props> = (props) => {
     <S.Wrapper $addMenu={Boolean(addMenu)} {...restProps}>
       {addHeader && (
         <S.TopLine>
-          <Button label="Пополнить баланс" $variant="active" />
-          {userData && (
+          {userData && typeof userData === "object" && (
             <S.CurrentBalance>
               <Typography
                 $fontSize="14px"
@@ -29,6 +28,7 @@ const MainWrapper: FC<Props> = (props) => {
               <Typography>{userData.depositWallet ?? "0.00"} USD</Typography>
             </S.CurrentBalance>
           )}
+          <Button label="Пополнить баланс" $variant="active" />
         </S.TopLine>
       )}
       {children} {addMenu && <Menu active={addMenu.active} />}

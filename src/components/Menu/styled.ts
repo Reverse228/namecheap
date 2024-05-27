@@ -8,13 +8,15 @@ export const Wrapper = styled.div`
   position: fixed;
   top: 100vh;
   width: 100%;
+  left: 50%;
   max-width: 720px;
-  transform: translateY(-100%);
-  padding: 12px 0;
+  transform: translate(-50%, -100%);
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   gap: 4px;
   background: ${Theme.colors.darkBlue};
+  z-index: 100;
 `;
 
 export const Buttons = styled.div<StyledProps>`

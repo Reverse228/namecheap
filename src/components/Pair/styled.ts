@@ -23,8 +23,8 @@ export const ButtonGroup = styled.div`
   gap: 12px;
 `;
 
-export const Button = styled.div<{ type: "sell" | "buy" }>`
-  ${({ type }) => css`
+export const Button = styled.div<{ type: "sell" | "buy"; $disable?: boolean }>`
+  ${({ type, $disable }) => css`
     display: flex;
     width: 100%;
     padding: 18px 24px;
@@ -33,7 +33,11 @@ export const Button = styled.div<{ type: "sell" | "buy" }>`
     transition: 0.2s;
     justify-content: space-between;
     background: ${type === "buy"
-      ? Theme.colors.lightGreen
+      ? $disable
+        ? rgba(Theme.colors.lightGreen, 0.2)
+        : Theme.colors.lightGreen
+      : $disable
+      ? rgba(Theme.colors.orange, 0.2)
       : Theme.colors.orange};
 
     &:hover {
@@ -41,6 +45,20 @@ export const Button = styled.div<{ type: "sell" | "buy" }>`
         ? rgba(Theme.colors.lightGreen, 0.8)
         : rgba(Theme.colors.orange, 0.8)};
     }
+
+    ${$disable &&
+    css`
+      pointer-events: none;
+
+      p {
+        color: ${rgba(Theme.colors.white, 0.6)};
+      }
+
+      svg,
+      path {
+        fill: ${rgba(Theme.colors.white, 0.6)};
+      }
+    `}
   `}
 `;
 
