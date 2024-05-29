@@ -6,6 +6,7 @@ export type StyledProps = {
   $margin?: string;
   $disabled?: boolean;
   $padding?: string;
+  $bg?: string;
 };
 
 export type Props = StyledProps &

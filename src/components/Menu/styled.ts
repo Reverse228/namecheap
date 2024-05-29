@@ -17,6 +17,7 @@ export const Wrapper = styled.div`
   gap: 4px;
   background: ${Theme.colors.darkBlue};
   z-index: 100;
+  border-top: 1px solid ${Theme.colors.darkerBlue};
 `;
 
 export const Buttons = styled.div<StyledProps>`

@@ -15,7 +15,7 @@ export const useMenu = () => {
     if (path === "/trade") {
       if (pairsData) {
         router.push(
-          `/trade/${pairsData[0].quoteCurrency}-${pairsData[0].baseCurrency}`
+          `/trade/${pairsData[0].quoteCurrency}-${pairsData[0].baseCurrency}/market-transaction`
         );
       }
     } else {

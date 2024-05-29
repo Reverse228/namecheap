@@ -28,7 +28,7 @@ export const Label = styled.p`
   color: ${rgba(Theme.colors.white, 0.8)};
 `;
 
-export const TextField = styled.input`
+export const Input = styled.input`
   width: 100%;
   padding: 8px 10px;
   background: ${Theme.colors.paledBlue};

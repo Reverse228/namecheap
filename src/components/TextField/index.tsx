@@ -11,7 +11,7 @@ const TextField: FC<Props> = (props) => {
         {label}
         {required && " *"}
       </S.Label>
-      <S.TextField {...restProps} />
+      <S.Input {...restProps} />
     </S.Wrapper>
   );
 };

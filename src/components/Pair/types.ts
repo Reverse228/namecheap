@@ -4,4 +4,7 @@ export type Props = {
   disableButtons?: boolean;
   baseCurrency?: string;
   quoteCurrency?: string;
+  buy?: {
+    path?: string;
+  };
 };

@@ -10,6 +10,7 @@ export const Theme = {
     darkerBlueHover: "#101a33",
     paledBlue: "#1e2639",
     paledBlueHover: "#334161",
+    lightBlue: "#0c91e6",
     white: "#ffffff",
     red: "#eb5252",
     orange: "#f57e3a",

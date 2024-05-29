@@ -8,7 +8,7 @@ import * as S from "./styled";
 import Pair from "@src/components/Pair/Pair";
 import Button from "@src/components/Button/Button";
 
-const Trade = ({ params }: { params: { pairs: string } }) => {
+const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
   const { isLoadingPage, router, userData } = useTrade();
 
   return (
@@ -21,6 +21,7 @@ const Trade = ({ params }: { params: { pairs: string } }) => {
     >
       {
         <Pair
+          buy={{ path: params.type }}
           disableButtons={typeof userData === "string" || !userData}
           quoteCurrency={params.pairs.split("-")[0]}
           baseCurrency={params.pairs.split("-")[1]}
