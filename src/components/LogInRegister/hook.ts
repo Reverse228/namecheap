@@ -1,7 +1,8 @@
-import { LogInUser, PostUser } from "@api";
+import { LogInUser, MeUser, PostUser } from "@api";
 import { setToken } from "@utils/functions";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { MeUserApi } from "@src/api/user/meUser";
 
 export const useLogInRegister = () => {
   const router = useRouter();
@@ -21,11 +22,17 @@ export const useLogInRegister = () => {
   const [errorDesc, setErrorDesc] = useState<string | null>(null);
   const [emailErr, setEmailErr] = useState<boolean>(false);
 
+  const [useData, setUseData] = useState<MeUserApi | string | null>(null);
+
   const activeRegButton = Boolean(
-    name && surname && email && pass && confirmPass
+    name && surname && email && pass && confirmPass,
   );
 
   const activeLogInButton = Boolean(email && pass);
+
+  const handleUserData = (value: MeUserApi | string) => {
+    setUseData(value);
+  };
 
   const handleName = (value: string) => {
     setName(value);
@@ -107,13 +114,20 @@ export const useLogInRegister = () => {
       if (response) {
         setIsSuccess(true);
         const token = await setToken(response.accessToken);
+        await MeUser(handleUserData);
 
-        token && router.push("/assets");
+        typeof useData === "object" && token && router.push("/assets");
       } else {
         setErrorLogIn(true);
       }
     }
   };
+
+  useEffect(() => {
+    if (typeof useData === "object") {
+      localStorage.setItem("userData", JSON.stringify(useData));
+    }
+  }, [useData]);
 
   return {
     router,

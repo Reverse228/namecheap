@@ -1,19 +1,23 @@
 import { MeUser } from "@src/api";
 import { MeUserApi } from "@src/api/user/meUser";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export const useMainWrapper = () => {
-  const [userData, setUserData] = useState<MeUserApi | string | null>(null);
+  const currentUser =
+    localStorage.getItem("userData") &&
+    JSON.parse(localStorage.getItem("userData") ?? "");
 
-  const handleUserData = (value: MeUserApi | string) => {
-    setUserData(value);
-  };
+  const router = useRouter();
 
   useEffect(() => {
-    MeUser(handleUserData);
+    MeUser((value) => {
+      typeof value !== "object" && localStorage.removeItem("userData");
+    });
   }, []);
 
   return {
-    userData,
+    router,
+    currentUser,
   };
 };

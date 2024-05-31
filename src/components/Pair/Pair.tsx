@@ -17,8 +17,10 @@ const Pair: FC<Props> = (props) => {
     router,
     sum,
     price,
+    buyPrice,
+    sellPrice,
     handles: { handleSum, handlePrice },
-  } = usePair();
+  } = usePair(baseCurrency, quoteCurrency);
 
   return (
     <S.Wrapper>
@@ -105,12 +107,17 @@ const Pair: FC<Props> = (props) => {
 
       <S.ButtonGroup>
         <S.Button
-          $disable={disableButtons || (buy && sum === "0") || sum === ""}
+          $disable={
+            disableButtons ||
+            sellPrice?.amount === "-" ||
+            (buy && sum === "0") ||
+            sum === ""
+          }
           type="sell"
           onClick={() =>
             !disableButtons &&
             router.push(
-              `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`
+              `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`,
             )
           }
         >
@@ -118,16 +125,28 @@ const Pair: FC<Props> = (props) => {
             <SvgIcon>
               <SellSvg />
             </SvgIcon>
-            <Typography>Продать</Typography>
+            <Typography>Продать </Typography>
           </S.TextIcons>
+          {sellPrice && (
+            <Typography $fontSize={"14px"}>
+              {sellPrice.amount !== "-"
+                ? `${Number(sellPrice.amount).toFixed(2)} USD`
+                : "-"}
+            </Typography>
+          )}
         </S.Button>
         <S.Button
-          $disable={disableButtons || (buy && sum === "0") || sum === ""}
+          $disable={
+            disableButtons ||
+            buyPrice?.amount === "-" ||
+            (buy && sum === "0") ||
+            sum === ""
+          }
           type="buy"
           onClick={() =>
             !disableButtons &&
             router.push(
-              `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`
+              `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`,
             )
           }
         >
@@ -137,6 +156,13 @@ const Pair: FC<Props> = (props) => {
             </SvgIcon>
             <Typography>Купить</Typography>
           </S.TextIcons>
+          {buyPrice && (
+            <Typography $fontSize={"14px"}>
+              {buyPrice.amount !== "-"
+                ? `${Number(buyPrice.amount).toFixed(2)} USD`
+                : "-"}
+            </Typography>
+          )}
         </S.Button>
       </S.ButtonGroup>
     </S.Wrapper>

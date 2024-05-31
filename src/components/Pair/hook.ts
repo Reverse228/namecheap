@@ -1,8 +1,19 @@
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { GetCoinPriceBuy } from "@api";
+import { CryptoCoinBuyPrice } from "@src/api/cryptoCoin/getCoinPriceBuy";
+import { GetCoinPriceSell } from "@src/api/cryptoCoin/getCointPriceSell";
 
-export const usePair = () => {
+export const usePair = (baseCurrency?: string, quoteCurrency?: string) => {
   const router = useRouter();
+
+  const [buyPrice, setBuyPrice] = useState<CryptoCoinBuyPrice | undefined>(
+    undefined,
+  );
+
+  const [sellPrice, setSellPrice] = useState<CryptoCoinBuyPrice | undefined>(
+    undefined,
+  );
 
   const [sum, setSum] = useState<string>("0");
   const [price, setPrice] = useState<string>("0");
@@ -19,5 +30,22 @@ export const usePair = () => {
     setPrice(numericValue);
   };
 
-  return { router, sum, price, handles: { handleSum, handlePrice } };
+  useEffect(() => {
+    GetCoinPriceBuy(quoteCurrency, baseCurrency).then((data) => {
+      data && setBuyPrice(data);
+    });
+
+    GetCoinPriceSell(quoteCurrency, baseCurrency).then((data) => {
+      data && setSellPrice(data);
+    });
+  }, []);
+
+  return {
+    router,
+    sum,
+    price,
+    buyPrice,
+    sellPrice,
+    handles: { handleSum, handlePrice },
+  };
 };

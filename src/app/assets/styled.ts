@@ -26,3 +26,11 @@ export const CustomLink = styled(Link)`
   color: ${Theme.colors.orange};
   text-decoration: underline;
 `;
+
+export const NoData = styled.div`
+  width: 100%;
+  padding: 120px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

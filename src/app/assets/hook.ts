@@ -1,20 +1,23 @@
-import { MeUser } from "@api";
+import { GetCoinPriceBuy, MeUser } from "@api";
 import { GetPairs } from "@src/api/pairs";
 import { GetPairsApi } from "@src/api/pairs/getPairs";
-import { MeUserApi } from "@src/api/user/meUser";
 import { useEffect, useState } from "react";
 
 export const useAssets = () => {
-  const [search, setSearch] = useState<string | null>(null);
   const [pairsData, setPairsData] = useState<GetPairsApi | null>(null);
-  const [userData, setUserData] = useState<MeUserApi | string | null>(null);
-
-  const handleUserData = (value: MeUserApi | string) => {
-    setUserData(value);
-  };
+  const [searchData, setSearchData] = useState<GetPairsApi | null>(null);
+  const [userData, setUserData] = useState<GetPairsApi | null>(null);
 
   const handleSearch = (value: string | null) => {
-    setSearch(value);
+    const searchPaird = value?.trim()
+      ? pairsData?.filter(
+          ({ baseCurrency, quoteCurrency }) =>
+            value?.toLowerCase() === baseCurrency.toLowerCase() ||
+            value?.toLowerCase() === quoteCurrency.toLowerCase(),
+        )
+      : pairsData;
+
+    setSearchData(searchPaird ?? null);
   };
 
   const handlePairsData = (value: GetPairsApi) => {
@@ -22,16 +25,21 @@ export const useAssets = () => {
   };
 
   useEffect(() => {
-    console.log(search);
-  }, [search]);
+    if (typeof window !== "undefined") {
+      setUserData(
+        localStorage.getItem("userData") &&
+          JSON.parse(localStorage.getItem("userData") ?? ""),
+      );
+    }
 
-  useEffect(() => {
-    GetPairs(handlePairsData);
-    MeUser(handleUserData);
+    GetPairs((value) => {
+      handlePairsData(value);
+      setSearchData(value);
+    });
   }, []);
 
   return {
-    pairsData,
+    searchData,
     userData,
     handles: {
       handleSearch,

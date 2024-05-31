@@ -52,6 +52,8 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
                 "header_symbol_search",
                 "compare_symbol",
                 "border_around_the_chart",
+                "header_indicators",
+                "border_around_the_chart",
               ]}
               allow_symbol_change={false}
               symbol={params.pairs.split("-").join("")}

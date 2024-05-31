@@ -12,10 +12,11 @@ import Link from "next/link";
 import SvgIcon from "@src/components/SvgIcon";
 import AlertSvg from "../../../public/svg/AlertSvg";
 import { Theme } from "@utils";
+import { rgba } from "emotion-rgba";
 
 const Assets = () => {
   const {
-    pairsData,
+    searchData,
     userData,
     handles: { handleSearch },
   } = useAssets();
@@ -23,9 +24,9 @@ const Assets = () => {
   return (
     <MainWrapper addMenu={{ active: "/assets" }} $gap="24px" addHeader>
       <Search setSearchInput={handleSearch} />
-      {pairsData && userData ? (
+      {searchData ? (
         <S.PairsWrapper>
-          {userData && typeof userData == "string" && (
+          {!userData && (
             <S.AlertMessage>
               <SvgIcon $fill={Theme.colors.orange}>
                 <AlertSvg />
@@ -41,14 +42,25 @@ const Assets = () => {
             </S.AlertMessage>
           )}
 
-          {pairsData.map(({ quoteCurrency, baseCurrency }, idx) => (
-            <Pair
-              key={idx}
-              disableButtons={typeof userData == "string"}
-              quoteCurrency={quoteCurrency}
-              baseCurrency={baseCurrency}
-            />
-          ))}
+          {searchData.length > 0 ? (
+            searchData.map(({ quoteCurrency, baseCurrency }, idx) => (
+              <Pair
+                key={idx}
+                disableButtons={!userData}
+                quoteCurrency={quoteCurrency}
+                baseCurrency={baseCurrency}
+              />
+            ))
+          ) : (
+            <S.NoData>
+              <Typography
+                $color={rgba(Theme.colors.white, 0.6)}
+                $fontSize={"24px"}
+              >
+                Ничего не найдено...
+              </Typography>
+            </S.NoData>
+          )}
         </S.PairsWrapper>
       ) : (
         <Typography>Подгружаем активы...</Typography>

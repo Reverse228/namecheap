@@ -20,7 +20,7 @@ export type MeUserApi = {
         quoteCurrency: string | null;
       };
       walletAddress: string | null;
-    }
+    },
   ];
   orders: [
     {
@@ -36,14 +36,14 @@ export type MeUserApi = {
       margin: number | null;
       orderStatus: string | null;
       timestamp: string | null;
-    }
+    },
   ];
   depositWallet: string | null;
 };
 
 export const MeUser = async (
-  setData: (data: MeUserApi | string) => void,
-  params?: object
+  setData?: (data: MeUserApi | string) => void,
+  params?: object,
 ) => {
   try {
     const token = Cookies.get("token");
@@ -56,8 +56,8 @@ export const MeUser = async (
           "Content-Type": "application/json",
         },
       })
-      .then(({ data }: { data: MeUserApi }) => setData(data));
+      .then(({ data }: { data: MeUserApi }) => setData && setData(data));
   } catch (e: any) {
-    setData(e.message);
+    setData && setData(e.message);
   }
 };

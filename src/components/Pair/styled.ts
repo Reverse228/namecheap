@@ -76,14 +76,15 @@ export const Button = styled.div<{ type: "sell" | "buy"; $disable?: boolean }>`
     cursor: pointer;
     border-radius: 6px;
     transition: 0.2s;
+    align-items: center;
     justify-content: space-between;
     background: ${type === "buy"
       ? $disable
         ? rgba(Theme.colors.lightGreen, 0.2)
         : Theme.colors.lightGreen
       : $disable
-      ? rgba(Theme.colors.orange, 0.2)
-      : Theme.colors.orange};
+        ? rgba(Theme.colors.orange, 0.2)
+        : Theme.colors.orange};
 
     &:hover {
       background: ${type === "buy"

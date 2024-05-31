@@ -39,3 +39,8 @@ export const CurrentBalance = styled.div`
   align-items: center;
   gap: 8px;
 `;
+
+export const NoUserLogIn = styled.div`
+  display: flex;
+  gap: 8px;
+`;
