@@ -11,13 +11,13 @@ import { Theme } from "@utils";
 const MainWrapper: FC<Props> = (props) => {
   const { children, addMenu, addHeader, ...restProps } = props;
 
-  const { currentUser, router } = useMainWrapper();
+  const { userData, router } = useMainWrapper();
 
   return (
     <S.Wrapper $addMenu={Boolean(addMenu)} {...restProps}>
       {addHeader && (
         <S.TopLine>
-          {currentUser && typeof currentUser === "object" ? (
+          {userData && typeof userData === "object" ? (
             <S.CurrentBalance>
               <Typography
                 $fontSize="14px"
@@ -25,7 +25,14 @@ const MainWrapper: FC<Props> = (props) => {
               >
                 Доступно:{" "}
               </Typography>
-              <Typography>{currentUser.depositWallet ?? "0.00"} USD</Typography>
+              <Typography>
+                {userData.assetBalances.find(
+                  ({ assetName }) => assetName === "USDT",
+                )?.balance ?? "0.00"}{" "}
+                {userData.assetBalances.find(
+                  ({ assetName }) => assetName === "USDT",
+                )?.assetName ?? "0.00"}
+              </Typography>
             </S.CurrentBalance>
           ) : (
             <S.NoUserLogIn>
@@ -37,7 +44,11 @@ const MainWrapper: FC<Props> = (props) => {
               />
             </S.NoUserLogIn>
           )}
-          <Button label="Пополнить баланс" $variant="active" />
+          <Button
+            label="Пополнить баланс"
+            $variant="active"
+            onClick={() => router.push("/profile/wallet")}
+          />
         </S.TopLine>
       )}
       {children} {addMenu && <Menu active={addMenu.active} />}

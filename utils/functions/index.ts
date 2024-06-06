@@ -1,1 +1,1 @@
-export { setToken } from "./authentication";
+export { setToken, destroyToken } from "./authentication";

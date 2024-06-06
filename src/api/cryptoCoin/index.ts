@@ -1,1 +1,0 @@
-export { GetCoinPriceBuy } from "./getCoinPriceBuy";

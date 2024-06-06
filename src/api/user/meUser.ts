@@ -56,7 +56,13 @@ export const MeUser = async (
           "Content-Type": "application/json",
         },
       })
-      .then(({ data }: { data: MeUserApi }) => setData && setData(data));
+      .then(({ data }: { data: MeUserApi }) => {
+        setData && setData(data);
+
+        if (typeof data === "object") {
+          localStorage.setItem("userData", JSON.stringify(data));
+        }
+      });
   } catch (e: any) {
     setData && setData(e.message);
   }

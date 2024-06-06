@@ -3,7 +3,7 @@ import * as S from "./styled";
 import { Props } from "./types";
 
 const Alert: FC<Props> = (props) => {
-  const { type, description } = props;
+  const { type, description, setState } = props;
 
   const [active, setActive] = useState<boolean>(true);
 
@@ -11,6 +11,7 @@ const Alert: FC<Props> = (props) => {
     setTimeout(() => {
       if (active) {
         setActive(!active);
+        setState && setState(null);
       }
     }, 5000);
   }, []);

@@ -11,14 +11,19 @@ import { rgba } from "emotion-rgba";
 import { Theme } from "@utils";
 
 const Pair: FC<Props> = (props) => {
-  const { baseCurrency, quoteCurrency, disableButtons, buy } = props;
+  const {
+    baseCurrency,
+    quoteCurrency,
+    disableButtons,
+    buy,
+    onClickBuy,
+    onCLickSell,
+  } = props;
 
   const {
     router,
     sum,
     price,
-    buyPrice,
-    sellPrice,
     handles: { handleSum, handlePrice },
   } = usePair(baseCurrency, quoteCurrency);
 
@@ -80,7 +85,7 @@ const Pair: FC<Props> = (props) => {
                   onBlur={() => sum === "" && handleSum("0")}
                   onChange={(e) => handleSum(e.target.value)}
                 />
-                <Typography>USD</Typography>
+                <Typography>{quoteCurrency}</Typography>
               </S.InputWrapper>
             </S.CustomInputWrapper>
             {buy?.path === "pending-transaction" && (
@@ -95,7 +100,6 @@ const Pair: FC<Props> = (props) => {
                   <S.Input
                     value={price}
                     onFocus={() => price === "0" && handlePrice("")}
-                    onBlur={() => price === "" && handlePrice("0")}
                     onChange={(e) => handlePrice(e.target.value)}
                   />
                 </S.InputWrapper>
@@ -107,18 +111,15 @@ const Pair: FC<Props> = (props) => {
 
       <S.ButtonGroup>
         <S.Button
-          $disable={
-            disableButtons ||
-            sellPrice?.amount === "-" ||
-            (buy && sum === "0") ||
-            sum === ""
-          }
+          $disable={disableButtons || (buy && sum === "0") || sum === ""}
           type="sell"
           onClick={() =>
             !disableButtons &&
-            router.push(
-              `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`,
-            )
+            (onCLickSell
+              ? onCLickSell(0, sum)
+              : router.push(
+                  `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`,
+                ))
           }
         >
           <S.TextIcons>
@@ -127,27 +128,17 @@ const Pair: FC<Props> = (props) => {
             </SvgIcon>
             <Typography>Продать </Typography>
           </S.TextIcons>
-          {sellPrice && (
-            <Typography $fontSize={"14px"}>
-              {sellPrice.amount !== "-"
-                ? `${Number(sellPrice.amount).toFixed(2)} USD`
-                : "-"}
-            </Typography>
-          )}
         </S.Button>
         <S.Button
-          $disable={
-            disableButtons ||
-            buyPrice?.amount === "-" ||
-            (buy && sum === "0") ||
-            sum === ""
-          }
+          $disable={disableButtons || (buy && sum === "0") || sum === ""}
           type="buy"
           onClick={() =>
             !disableButtons &&
-            router.push(
-              `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`,
-            )
+            (onClickBuy
+              ? onClickBuy(0, sum)
+              : router.push(
+                  `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`,
+                ))
           }
         >
           <S.TextIcons>
@@ -156,13 +147,6 @@ const Pair: FC<Props> = (props) => {
             </SvgIcon>
             <Typography>Купить</Typography>
           </S.TextIcons>
-          {buyPrice && (
-            <Typography $fontSize={"14px"}>
-              {buyPrice.amount !== "-"
-                ? `${Number(buyPrice.amount).toFixed(2)} USD`
-                : "-"}
-            </Typography>
-          )}
         </S.Button>
       </S.ButtonGroup>
     </S.Wrapper>

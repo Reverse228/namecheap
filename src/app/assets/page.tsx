@@ -7,12 +7,12 @@ import Typography from "@src/components/Typography/Typography";
 import Search from "@src/components/Search/Search";
 import Pair from "@src/components/Pair/Pair";
 
-import * as S from "./styled";
-import Link from "next/link";
 import SvgIcon from "@src/components/SvgIcon";
 import AlertSvg from "../../../public/svg/AlertSvg";
 import { Theme } from "@utils";
 import { rgba } from "emotion-rgba";
+
+import * as S from "./styled";
 
 const Assets = () => {
   const {
@@ -63,7 +63,11 @@ const Assets = () => {
           )}
         </S.PairsWrapper>
       ) : (
-        <Typography>Подгружаем активы...</Typography>
+        <S.NoData>
+          <Typography $color={rgba(Theme.colors.white, 0.6)} $fontSize={"24px"}>
+            Подгружаем активы...
+          </Typography>
+        </S.NoData>
       )}
     </MainWrapper>
   );

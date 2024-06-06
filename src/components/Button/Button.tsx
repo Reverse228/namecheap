@@ -1,11 +1,17 @@
-import { PostUser } from "../../api";
 import { FC } from "react";
 
 import * as S from "./styled";
 import { Props } from "./types";
 
 const Button: FC<Props> = (props) => {
-  const { label, $variant = "simple", disable, onClick, ...restProps } = props;
+  const {
+    label,
+    $variant = "simple",
+    disable,
+    onClick,
+    children,
+    ...restProps
+  } = props;
 
   return (
     <S.Wrapper
@@ -15,6 +21,7 @@ const Button: FC<Props> = (props) => {
       {...restProps}
     >
       {label}
+      {children}
     </S.Wrapper>
   );
 };

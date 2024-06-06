@@ -14,7 +14,6 @@ export const GetPairs = async (setData: (value: GetPairsApi) => void) => {
     await axios
       .get(`${API_URL}/pairs`, {
         headers: {
-          Authorization: token,
           "Content-Type": "application/json",
         },
       })

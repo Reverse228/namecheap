@@ -6,7 +6,7 @@ import Link from "next/link";
 export const PairsWrapper = styled.div`
   width: 100%;
   display: grid;
-  gap: 16px;
+  gap: 24px;
   align-self: center;
 `;
 

@@ -10,6 +10,6 @@ export type Props = StyledProps & {
   children: ReactNode;
   addHeader?: boolean;
   addMenu?: {
-    active: "/assets" | "/trade" | false;
+    active: "/assets" | "/trade" | "/deals" | "/profile" | false;
   };
 };

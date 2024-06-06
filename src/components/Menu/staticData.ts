@@ -2,6 +2,7 @@ import AnalysisSvg from "../../../public/svg/AnalysisSvg";
 import CompressSvg from "../../../public/svg/CompressSvg";
 import GraphBarSvg from "../../../public/svg/GraphBarSvg";
 import HistorySvg from "../../../public/svg/HistorySvg";
+import ProfileSvg from "../../../public/svg/ProfileSvg";
 
 export const MenuContent = [
   {
@@ -19,7 +20,7 @@ export const MenuContent = [
   {
     id: 2,
     name: "Сделки",
-    path: "",
+    path: "/deals",
     Icon: CompressSvg,
   },
   {
@@ -31,7 +32,7 @@ export const MenuContent = [
   {
     id: 4,
     name: "Профиль",
-    path: "",
-    Icon: GraphBarSvg,
+    path: "/profile",
+    Icon: ProfileSvg,
   },
 ];

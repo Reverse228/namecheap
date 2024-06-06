@@ -11,3 +11,7 @@ export const setToken = async (token: string): Promise<boolean> => {
     return false;
   }
 };
+
+export const destroyToken = () => {
+  Cookies.remove("token");
+};

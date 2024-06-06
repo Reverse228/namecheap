@@ -7,7 +7,7 @@ import Link from "next/link";
 export const Wrapper = styled.div`
   width: 100%;
   overflow: hidden;
-  padding: 12px;
+  padding: 16px 12px;
   border-radius: 6px;
   display: grid;
   gap: 16px;

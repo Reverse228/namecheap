@@ -3,5 +3,5 @@ export type StyledProps = {
 };
 
 export type Props = StyledProps & {
-  active?: "/assets" | "/trade" | false;
+  active?: "/assets" | "/trade" | "/deals" | "/profile" | false;
 };

@@ -95,8 +95,9 @@ export const useLogInRegister = () => {
         if (response.accessToken) {
           setIsSuccess(true);
           const token = await setToken(response.accessToken);
+          await MeUser(handleUserData);
 
-          token && router.push("/assets");
+          typeof useData === "object" && token && router.push("/assets");
         } else {
           setErrorDesc(response.response.data.data);
           setEmailErr(true);

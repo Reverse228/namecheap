@@ -12,6 +12,7 @@ export const Wrapper = styled.div<StyledProps>`
   padding: 12px 24px;
   display: grid;
   gap: 8px;
+  z-index: 100;
   background: ${Theme.colors.paledBlueHover};
   border-left: 4px solid
     ${({ $type }) =>

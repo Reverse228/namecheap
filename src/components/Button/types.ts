@@ -1,4 +1,4 @@
-import { DOMAttributes } from "react";
+import { DOMAttributes, ReactNode } from "react";
 
 export type StyledProps = {
   $variant?: "simple" | "active";
@@ -13,4 +13,5 @@ export type Props = StyledProps &
   DOMAttributes<HTMLDivElement> & {
     label: string;
     disable?: boolean;
+    children?: ReactNode;
   };

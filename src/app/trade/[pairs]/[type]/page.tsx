@@ -7,9 +7,18 @@ import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import * as S from "./styled";
 import Pair from "@src/components/Pair/Pair";
 import Button from "@src/components/Button/Button";
+import PopUp from "@components/PopUp/PopUp";
+import Alert from "@src/components/Alert/Alert";
 
 const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
-  const { isLoadingPage, router, userData } = useTrade();
+  const {
+    isLoadingPage,
+    router,
+    alertMessage,
+    userData,
+    notFounds,
+    handles: { handleTrade, handleNotFounds, handleAlertMessage },
+  } = useTrade();
 
   return (
     <MainWrapper
@@ -19,14 +28,35 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
       addHeader
       $gap="24px"
     >
-      {
-        <Pair
-          buy={{ path: params.type }}
-          disableButtons={typeof userData === "string" || !userData}
-          quoteCurrency={params.pairs.split("-")[0]}
-          baseCurrency={params.pairs.split("-")[1]}
+      {alertMessage && (
+        <Alert
+          type="error"
+          description={alertMessage}
+          setState={handleAlertMessage}
         />
-      }
+      )}
+
+      <PopUp
+        appear={notFounds}
+        closePopUp={() => handleNotFounds(false)}
+        bottomButton={{
+          label: "Пополнить кошелек",
+          variant: "active",
+        }}
+        header={"Сделка отменена"}
+        messages={
+          "У вас недостаточный баланс кошелька для выполнения этой сделки. Пожалуйста, уменьшите размер сделки или пополните свой кошелек."
+        }
+      />
+
+      <Pair
+        buy={{ path: params.type }}
+        onClickBuy={(priceBuy, sum) => handleTrade("BUY", params.pairs, sum)}
+        onCLickSell={(priceBuy, sum) => handleTrade("SELL", params.pairs, sum)}
+        disableButtons={typeof userData === "string" || !userData}
+        quoteCurrency={params.pairs.split("-")[0]}
+        baseCurrency={params.pairs.split("-")[1]}
+      />
 
       {userData && (
         <S.Graph>
@@ -40,7 +70,7 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
               />
             </S.NoUser>
           )}
-          {isLoadingPage && (
+          {isLoadingPage && params.pairs ? (
             <AdvancedRealTimeChart
               theme="dark"
               hide_side_toolbar
@@ -56,9 +86,11 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
                 "border_around_the_chart",
               ]}
               allow_symbol_change={false}
-              symbol={params.pairs.split("-").join("")}
+              symbol={params.pairs.split("-").reverse().join("")}
               save_image={false}
             />
+          ) : (
+            <>Loading</>
           )}
         </S.Graph>
       )}
