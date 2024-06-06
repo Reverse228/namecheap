@@ -2,23 +2,42 @@
 
 import MainWrapper from "@src/components/MainWrapper/MainWrapper";
 import { useTrade } from "./hook";
-import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
+import { AdvancedRealTimeChartProps } from "react-ts-tradingview-widgets";
+import dynamic from "next/dynamic";
 
 import * as S from "./styled";
 import Pair from "@src/components/Pair/Pair";
 import Button from "@src/components/Button/Button";
 import PopUp from "@components/PopUp/PopUp";
 import Alert from "@src/components/Alert/Alert";
+import { ComponentType, useEffect, useState } from "react";
+
+const AdvancedRealTimeChart: ComponentType<AdvancedRealTimeChartProps> =
+  dynamic(
+    () =>
+      import("react-ts-tradingview-widgets").then(
+        (w) => w.AdvancedRealTimeChart,
+      ),
+    {
+      ssr: false,
+    },
+  );
 
 const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
+  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   const {
-    isLoadingPage,
     router,
     alertMessage,
     userData,
     notFounds,
     handles: { handleTrade, handleNotFounds, handleAlertMessage },
   } = useTrade();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoadingPage(true);
+    }, 500);
+  }, []);
 
   return (
     <MainWrapper

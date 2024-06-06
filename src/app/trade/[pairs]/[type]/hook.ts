@@ -4,7 +4,6 @@ import { useGetUserData } from "@utils/hooks";
 import { PostOrder, SendOrderProps } from "@api";
 
 export const useTrade = () => {
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   const [notFounds, setNotFounds] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -64,15 +63,10 @@ export const useTrade = () => {
     }
   };
 
-  useEffect(() => {
-    setIsLoadingPage(true);
-  }, []);
-
   return {
     router,
     alertMessage,
     userData,
-    isLoadingPage,
     notFounds,
     handles: {
       handleTrade,
