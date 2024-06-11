@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGetUserData } from "@utils/hooks";
 import { PostOrder, SendOrderProps } from "@api";
 

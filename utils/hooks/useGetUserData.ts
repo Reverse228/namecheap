@@ -6,6 +6,7 @@ export const useGetUserData = () => {
     localStorage.getItem("userData") &&
       JSON.parse(localStorage.getItem("userData") ?? ""),
   );
+
   const [trigger, setTrigger] = useState<boolean>(false);
 
   const [apiUserData, setApiUserData] = useState<MeUserApi | string | null>();

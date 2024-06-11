@@ -26,7 +26,7 @@ const Assets = () => {
       <Search setSearchInput={handleSearch} />
       {searchData ? (
         <S.PairsWrapper>
-          {!userData && (
+          {(typeof userData === "string" || !userData) && (
             <S.AlertMessage>
               <SvgIcon $fill={Theme.colors.orange}>
                 <AlertSvg />
@@ -46,7 +46,7 @@ const Assets = () => {
             searchData.map(({ quoteCurrency, baseCurrency }, idx) => (
               <Pair
                 key={idx}
-                disableButtons={!userData}
+                disableButtons={typeof userData === "string" || !userData}
                 quoteCurrency={quoteCurrency}
                 baseCurrency={baseCurrency}
               />
