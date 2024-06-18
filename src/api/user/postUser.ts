@@ -1,22 +1,21 @@
-import { API_URL } from "@utils";
-import axios from "axios";
+import { useMutationSideEffects } from "@utils/hooks";
+import { axiosMutation } from "@functions";
 
-export const PostUser = async (sendDta: {
-  email: string;
-  password: string;
-  phone: string;
-  country: string;
-  name: string;
-}) => {
-  try {
-    const { data } = await axios.post(`${API_URL}/auth/register`, sendDta, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+export const PostUser = () => {
+  const { executeMutation, isSuccess, data } = useMutationSideEffects<
+    any,
+    {
+      email: string;
+      password: string;
+      phone: string;
+      country: string;
+      name: string;
+    }
+  >({
+    onExecuteMutation: async (data) =>
+      await axiosMutation("post", `auth/register`),
+    refetchQueries: ["auth/me"],
+  });
 
-    return data as { accessToken: string; refreshToken: string };
-  } catch (e) {
-    return e;
-  }
+  return { executeMutation, isSuccess, data };
 };

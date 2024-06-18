@@ -1,7 +1,12 @@
-import { useGetUserData } from "@utils/hooks";
+import { useGetMe } from "@api";
 
 export const useWallet = () => {
-  const { userData } = useGetUserData();
+  const { data: userData, isLoading } = useGetMe();
 
-  return { userData };
+  const balance = isLoading
+    ? "-"
+    : userData?.assetBalances.find(({ currency }) => currency === "USDT")
+        ?.balance ?? "0.00";
+
+  return { userData, balance };
 };

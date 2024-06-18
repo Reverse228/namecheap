@@ -1,21 +1,15 @@
-import { API_URL } from "@utils";
-import axios from "axios";
+import { useMutationSideEffects } from "@utils/hooks";
+import { axiosMutation, setToken } from "@functions";
 
-export const LogInUser = async (email: string, password: string) => {
-  const dataSend = {
-    email,
-    password,
-  };
+export const LogInUser = () => {
+  const { executeMutation, isSuccess, data } = useMutationSideEffects<
+    { accessToken: string },
+    { email: string; password: string }
+  >({
+    onExecuteMutation: async (data) =>
+      await axiosMutation("post", `auth/login`, data, undefined, true),
+    refetchQueries: ["auth/me"],
+  });
 
-  try {
-    const { data } = await axios.post(`${API_URL}/auth/login`, dataSend, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    return data as { accessToken: string; refreshToken: string };
-  } catch (e) {
-    return null;
-  }
+  return { executeMutation, isSuccess, data };
 };

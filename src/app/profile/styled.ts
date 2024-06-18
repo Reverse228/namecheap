@@ -1,14 +1,14 @@
 import styled from "@emotion/styled";
 import { Theme } from "@utils";
+import { css } from "@emotion/react";
 
 export const Header = styled.header`
   width: 100%;
   padding: 0 0 24px;
   gap: 8px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+
   border-bottom: 1px solid ${Theme.colors.darkerBlue};
 `;
 
@@ -26,4 +26,27 @@ export const BalanceRow = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+`;
+
+export const WalletGroup = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
+`;
+
+export const ButtonGroup = styled.div<{ $direction?: string }>`
+  ${({ $direction }) => css`
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-top: 24px;
+
+    ${$direction &&
+    css`
+      flex-direction: ${$direction};
+    `}
+  `}
 `;

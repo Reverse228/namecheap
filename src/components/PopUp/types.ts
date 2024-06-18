@@ -1,5 +1,7 @@
+import { ReactNode } from "react";
+
 export type Props = {
-  messages?: string;
+  messages?: string | ReactNode;
   header?: string;
   appear?: boolean;
   closePopUp?: () => void;

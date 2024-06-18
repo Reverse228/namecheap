@@ -26,7 +26,7 @@ export const MenuContent = [
   {
     id: 3,
     name: "История",
-    path: "",
+    path: "/history",
     Icon: HistorySvg,
   },
   {

@@ -1,13 +1,19 @@
 import { GetPairs } from "@src/api/pairs";
 import { GetPairsApi } from "@src/api/pairs/getPairs";
 import { useEffect, useState } from "react";
-import { useGetUserData } from "@utils/hooks";
+import { useGetMe } from "@api";
 
 export const useAssets = () => {
-  const [pairsData, setPairsData] = useState<GetPairsApi | null>(null);
-  const [searchData, setSearchData] = useState<GetPairsApi | null>(null);
+  const [searchData, setSearchData] = useState<GetPairsApi | undefined>(
+    undefined,
+  );
 
-  const { userData } = useGetUserData();
+  const {
+    data: userData,
+    isSuccess: isSuccessUserData,
+    isLoading: isLoadingUserData,
+  } = useGetMe();
+  const { data: pairsData, isLoading } = GetPairs();
 
   const handleSearch = (value: string | null) => {
     const searchPaird = value?.trim()
@@ -18,23 +24,21 @@ export const useAssets = () => {
         )
       : pairsData;
 
-    setSearchData(searchPaird ?? null);
-  };
-
-  const handlePairsData = (value: GetPairsApi) => {
-    setPairsData(value);
+    setSearchData(searchPaird);
   };
 
   useEffect(() => {
-    GetPairs((value) => {
-      handlePairsData(value);
-      setSearchData(value);
-    });
-  }, []);
+    if (pairsData) {
+      setSearchData(pairsData);
+    }
+  }, [pairsData]);
 
   return {
     searchData,
     userData,
+    isLoading,
+    isSuccessUserData,
+    isLoadingUserData,
     handles: {
       handleSearch,
     },

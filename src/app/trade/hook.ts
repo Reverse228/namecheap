@@ -5,22 +5,14 @@ import { GetPairs, GetPairsApi } from "@src/api/pairs/getPairs";
 export const useTradeNoPage = () => {
   const router = useRouter();
 
-  const [pairsData, setPairsData] = useState<GetPairsApi | null>(null);
-
-  const handlePairsData = (value: GetPairsApi) => {
-    setPairsData(value);
-  };
+  const { data } = GetPairs();
 
   useEffect(() => {
-    GetPairs(handlePairsData);
-  }, []);
-
-  useEffect(() => {
-    pairsData &&
+    data &&
       router.replace(
-        `trade/${pairsData[0].quoteCurrency}-${pairsData[0].baseCurrency}/market-transaction`,
+        `trade/${data[0].quoteCurrency}-${data[0].baseCurrency}/market-transaction`,
       );
-  }, [pairsData]);
+  }, [data]);
 
   return {};
 };

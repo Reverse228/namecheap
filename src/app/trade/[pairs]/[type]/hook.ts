@@ -1,13 +1,14 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useGetUserData } from "@utils/hooks";
-import { PostOrder, SendOrderProps } from "@api";
+import { PostOrder, SendOrderProps, useGetMe } from "@api";
 
 export const useTrade = () => {
   const [notFounds, setNotFounds] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-  const { userData, handleTrigger } = useGetUserData();
+  const { data: userData, isSuccess, isLoading } = useGetMe();
+  const { executeMutation, data: postOrderData } = PostOrder();
 
   const router = useRouter();
 
@@ -24,50 +25,39 @@ export const useTrade = () => {
     pair: string,
     sum?: string | undefined,
   ) => {
-    if (typeof userData === "object") {
-      if (
-        Number(
-          userData?.assetBalances.find(({ assetName }) => assetName === "USDT")
-            ?.balance,
-        ) < 0
-      ) {
-        setNotFounds(true);
-      } else {
-        const time = new Date();
-        const sendDate: SendOrderProps = {
-          pair: {
-            baseCurrency: pair.split("-")[1] ?? "",
-            quoteCurrency: pair.split("-")[0] ?? "",
-          },
-          amount: Number(sum) ?? 0,
-          price: 0,
-          orderType: type,
-          orderCategory: "SPOT",
-          margin: 0,
-          orderStatus: "OPEN",
-          timestamp: time,
-        };
+    const balance = Number(
+      userData?.assetBalances.find(({ currency }) => currency === "USDT")
+        ?.balance ?? 0,
+    );
 
-        PostOrder(sendDate)
-          .then((value) => {
-            handleTrigger();
+    if (balance <= 0) {
+      handleNotFounds(true);
+    } else {
+      const time = new Date();
+      const sendDate: SendOrderProps = {
+        pair: {
+          baseCurrency: pair.split("-")[1] ?? "",
+          quoteCurrency: pair.split("-")[0] ?? "",
+        },
+        amount: Number(sum) ?? 0,
+        price: 0,
+        orderType: type,
+        orderCategory: "SPOT",
+        margin: 0,
+        orderStatus: "OPEN",
+        timestamp: time,
+      };
 
-            if (typeof value === "string") {
-              const getError = value.split('"')[1];
-              setAlertMessage(getError);
-            }
-            console.log(value);
-          })
-          .catch((e) => {});
-      }
+      executeMutation(sendDate);
     }
   };
 
   return {
     router,
     alertMessage,
-    userData,
     notFounds,
+    isSuccess,
+    isLoading,
     handles: {
       handleTrade,
       handleNotFounds,

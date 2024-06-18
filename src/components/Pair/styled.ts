@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { Theme } from "@utils";
 import { rgba } from "emotion-rgba";
 import Link from "next/link";
+import Typography from "@components/Typography/Typography";
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -25,6 +26,10 @@ export const ButtonGroup = styled.div<{ $gap?: string }>`
     position: relative;
     display: flex;
     gap: ${$gap ?? "12px"};
+
+    @media only screen and (max-width: 580px) {
+      flex-direction: column;
+    }
   `}
 `;
 
@@ -114,6 +119,11 @@ export const TextIcons = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
+`;
+
+export const Price = styled(Typography)`
+  align-self: end;
+  font-size: 14px;
 `;
 
 export const CustomLink = styled(Link)`

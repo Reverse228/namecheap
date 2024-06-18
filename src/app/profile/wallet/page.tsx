@@ -9,7 +9,7 @@ import { useWallet } from "@src/app/profile/wallet/hook";
 import TextField from "@components/TextField";
 
 const Page = () => {
-  const { userData } = useWallet();
+  const { userData, balance } = useWallet();
 
   return (
     <MainWrapper addMenu={{ active: "/profile" }} $gap={"12px"}>
@@ -24,13 +24,7 @@ const Page = () => {
           <Typography $color={rgba(Theme.colors.white, 0.6)}>
             Баланс:
           </Typography>
-          <Typography>
-            {typeof userData === "object" &&
-              (userData?.assetBalances.find(
-                ({ assetName }) => assetName === "USDT",
-              )?.balance ??
-                "0.00")}
-          </Typography>
+          <Typography>{`${balance} USD`}</Typography>
         </S.TypographyGroup>
       </S.Header>
       <TextField label={"Способ оплаты"} />

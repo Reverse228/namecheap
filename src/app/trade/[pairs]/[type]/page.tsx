@@ -11,6 +11,9 @@ import Button from "@src/components/Button/Button";
 import PopUp from "@components/PopUp/PopUp";
 import Alert from "@src/components/Alert/Alert";
 import { ComponentType, useEffect, useState } from "react";
+import Typography from "@components/Typography/Typography";
+import { rgba } from "emotion-rgba";
+import { Theme } from "@utils";
 
 const AdvancedRealTimeChart: ComponentType<AdvancedRealTimeChartProps> =
   dynamic(
@@ -24,20 +27,14 @@ const AdvancedRealTimeChart: ComponentType<AdvancedRealTimeChartProps> =
   );
 
 const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
-  const [isLoadingPage, setIsLoadingPage] = useState<boolean>(false);
   const {
     router,
     alertMessage,
-    userData,
     notFounds,
+    isSuccess,
+    isLoading,
     handles: { handleTrade, handleNotFounds, handleAlertMessage },
   } = useTrade();
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoadingPage(true);
-    }, 500);
-  }, []);
 
   return (
     <MainWrapper
@@ -68,50 +65,63 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
         }
       />
 
-      <Pair
-        buy={{ path: params.type }}
-        onClickBuy={(priceBuy, sum) => handleTrade("BUY", params.pairs, sum)}
-        onCLickSell={(priceBuy, sum) => handleTrade("SELL", params.pairs, sum)}
-        disableButtons={typeof userData === "string" || !userData}
-        quoteCurrency={params.pairs.split("-")[0]}
-        baseCurrency={params.pairs.split("-")[1]}
-      />
+      {isLoading ? (
+        <></>
+      ) : (
+        <>
+          <Pair
+            buy={{ path: params.type }}
+            onClickBuy={(priceBuy, sum) =>
+              handleTrade("BUY", params.pairs, sum)
+            }
+            onCLickSell={(priceBuy, sum) =>
+              handleTrade("SELL", params.pairs, sum)
+            }
+            disableButtons={!isSuccess}
+            quoteCurrency={params.pairs.split("-")[0]}
+            baseCurrency={params.pairs.split("-")[1]}
+          />
 
-      {userData && (
-        <S.Graph>
-          {typeof userData === "string" && (
-            <S.NoUser>
-              <Button label="Войти" onClick={() => router.push("/logIn")} />
-              <Button
-                label="Зарегестрироваться"
-                $variant="active"
-                onClick={() => router.push("/register")}
+          <S.Graph>
+            {!isSuccess && (
+              <S.NoUser>
+                <Button label="Войти" onClick={() => router.push("/logIn")} />
+                <Button
+                  label="Зарегестрироваться"
+                  $variant="active"
+                  onClick={() => router.push("/register")}
+                />
+              </S.NoUser>
+            )}
+            {params.pairs ? (
+              <AdvancedRealTimeChart
+                theme="dark"
+                hide_side_toolbar
+                autosize
+                copyrightStyles={{
+                  parent: { display: "none" },
+                }}
+                disabled_features={[
+                  "header_symbol_search",
+                  "compare_symbol",
+                  "border_around_the_chart",
+                  "header_indicators",
+                  "border_around_the_chart",
+                ]}
+                allow_symbol_change={false}
+                symbol={params.pairs.split("-").reverse().join("")}
+                save_image={false}
               />
-            </S.NoUser>
-          )}
-          {isLoadingPage && params.pairs ? (
-            <AdvancedRealTimeChart
-              theme="dark"
-              hide_side_toolbar
-              autosize
-              copyrightStyles={{
-                parent: { display: "none" },
-              }}
-              disabled_features={[
-                "header_symbol_search",
-                "compare_symbol",
-                "border_around_the_chart",
-                "header_indicators",
-                "border_around_the_chart",
-              ]}
-              allow_symbol_change={false}
-              symbol={params.pairs.split("-").reverse().join("")}
-              save_image={false}
-            />
-          ) : (
-            <>Loading</>
-          )}
-        </S.Graph>
+            ) : (
+              <Typography
+                $color={rgba(Theme.colors.white, 0.6)}
+                $fontSize={"24px"}
+              >
+                Таблица загружается
+              </Typography>
+            )}
+          </S.Graph>
+        </>
       )}
     </MainWrapper>
   );

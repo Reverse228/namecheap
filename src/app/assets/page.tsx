@@ -18,15 +18,24 @@ const Assets = () => {
   const {
     searchData,
     userData,
+    isLoading,
+    isSuccessUserData,
+    isLoadingUserData,
     handles: { handleSearch },
   } = useAssets();
 
   return (
     <MainWrapper addMenu={{ active: "/assets" }} $gap="24px" addHeader>
       <Search setSearchInput={handleSearch} />
-      {searchData ? (
+      {isLoading ? (
+        <S.NoData>
+          <Typography $color={rgba(Theme.colors.white, 0.6)} $fontSize={"24px"}>
+            Подгружаем активы...
+          </Typography>
+        </S.NoData>
+      ) : (
         <S.PairsWrapper>
-          {(typeof userData === "string" || !userData) && (
+          {!isLoadingUserData && !isSuccessUserData && (
             <S.AlertMessage>
               <SvgIcon $fill={Theme.colors.orange}>
                 <AlertSvg />
@@ -42,32 +51,30 @@ const Assets = () => {
             </S.AlertMessage>
           )}
 
-          {searchData.length > 0 ? (
-            searchData.map(({ quoteCurrency, baseCurrency }, idx) => (
-              <Pair
-                key={idx}
-                disableButtons={typeof userData === "string" || !userData}
-                quoteCurrency={quoteCurrency}
-                baseCurrency={baseCurrency}
-              />
-            ))
-          ) : (
-            <S.NoData>
-              <Typography
-                $color={rgba(Theme.colors.white, 0.6)}
-                $fontSize={"24px"}
-              >
-                Ничего не найдено...
-              </Typography>
-            </S.NoData>
-          )}
+          {searchData &&
+            (searchData.length ? (
+              searchData.map(
+                ({ quoteCurrency, baseCurrency, type, lastPrice }, idx) => (
+                  <Pair
+                    key={idx}
+                    price={lastPrice}
+                    disableButtons={!isSuccessUserData}
+                    quoteCurrency={quoteCurrency}
+                    baseCurrency={baseCurrency}
+                  />
+                ),
+              )
+            ) : (
+              <S.NoData>
+                <Typography
+                  $color={rgba(Theme.colors.white, 0.6)}
+                  $fontSize={"24px"}
+                >
+                  Ничего не найдено...
+                </Typography>
+              </S.NoData>
+            ))}
         </S.PairsWrapper>
-      ) : (
-        <S.NoData>
-          <Typography $color={rgba(Theme.colors.white, 0.6)} $fontSize={"24px"}>
-            Подгружаем активы...
-          </Typography>
-        </S.NoData>
       )}
     </MainWrapper>
   );

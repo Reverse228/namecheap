@@ -1,8 +1,9 @@
-import { LogInUser, MeUser, PostUser } from "@api";
+import { LogInUser, PostUser } from "@api";
 import { setToken } from "@utils/functions";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MeUserApi } from "@src/api/user/meUser";
+import Cookies from "js-cookie";
 
 export const useLogInRegister = () => {
   const router = useRouter();
@@ -22,17 +23,14 @@ export const useLogInRegister = () => {
   const [errorDesc, setErrorDesc] = useState<string | null>(null);
   const [emailErr, setEmailErr] = useState<boolean>(false);
 
-  const [useData, setUseData] = useState<MeUserApi | string | null>(null);
+  const { executeMutation: logIn, data: logInData } = LogInUser();
+  const { executeMutation: register, data: registerData } = PostUser();
 
   const activeRegButton = Boolean(
     name && surname && email && pass && confirmPass,
   );
 
   const activeLogInButton = Boolean(email && pass);
-
-  const handleUserData = (value: MeUserApi | string) => {
-    setUseData(value);
-  };
 
   const handleName = (value: string) => {
     setName(value);
@@ -90,18 +88,7 @@ export const useLogInRegister = () => {
           name: `${name} ${surname}`,
         };
 
-        const response: any = await PostUser(data);
-
-        if (response.accessToken) {
-          setIsSuccess(true);
-          const token = await setToken(response.accessToken);
-          await MeUser(handleUserData);
-
-          typeof useData === "object" && token && router.push("/assets");
-        } else {
-          setErrorDesc(response.response.data.data);
-          setEmailErr(true);
-        }
+        register(data);
       } else {
         setEqualsPass(true);
       }
@@ -110,25 +97,30 @@ export const useLogInRegister = () => {
 
   const handleLogIn = async () => {
     if (pass && email) {
-      const response = await LogInUser(email, pass);
-
-      if (response) {
-        setIsSuccess(true);
-        const token = await setToken(response.accessToken);
-        await MeUser(handleUserData);
-
-        typeof useData === "object" && token && router.push("/assets");
-      } else {
-        setErrorLogIn(true);
-      }
+      logIn({ email, password: pass });
     }
   };
 
   useEffect(() => {
-    if (typeof useData === "object") {
-      localStorage.setItem("userData", JSON.stringify(useData));
+    const loadToken = async (data: { accessToken: string }) => {
+      await setToken(data.accessToken).then((data) => {
+        localStorage.setItem("nodeAccess", "true");
+        if (data) {
+          setTimeout(() => {
+            router.push("/assets");
+          }, 200);
+        }
+      });
+    };
+
+    if (logInData || registerData) {
+      if (logInData) {
+        loadToken(logInData);
+      } else if (registerData) {
+        loadToken(registerData);
+      }
     }
-  }, [useData]);
+  }, [logInData, registerData]);
 
   return {
     router,

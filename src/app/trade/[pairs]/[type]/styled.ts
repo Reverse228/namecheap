@@ -8,6 +8,7 @@ export const Graph = styled.div`
   position: relative;
   min-height: 600px;
   border-radius: 4px;
+  text-align: center;
 `;
 
 export const ButtonGroup = styled.div`

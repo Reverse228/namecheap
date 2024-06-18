@@ -18,13 +18,14 @@ const Pair: FC<Props> = (props) => {
     buy,
     onClickBuy,
     onCLickSell,
+    price,
   } = props;
 
   const {
     router,
     sum,
-    price,
-    handles: { handleSum, handlePrice },
+
+    handles: { handleSum },
   } = usePair(baseCurrency, quoteCurrency);
 
   return (
@@ -99,8 +100,8 @@ const Pair: FC<Props> = (props) => {
                 <S.InputWrapper>
                   <S.Input
                     value={price}
-                    onFocus={() => price === "0" && handlePrice("")}
-                    onChange={(e) => handlePrice(e.target.value)}
+                    // onFocus={() => handlePrice("")}
+                    // onChange={(e) => handlePrice(e.target.value)}
                   />
                 </S.InputWrapper>
               </S.CustomInputWrapper>
@@ -128,6 +129,7 @@ const Pair: FC<Props> = (props) => {
             </SvgIcon>
             <Typography>Продать </Typography>
           </S.TextIcons>
+          <S.Price>{price && `${price?.toFixed(2)} USDT`}</S.Price>
         </S.Button>
         <S.Button
           $disable={disableButtons || (buy && sum === "0") || sum === ""}
@@ -147,6 +149,7 @@ const Pair: FC<Props> = (props) => {
             </SvgIcon>
             <Typography>Купить</Typography>
           </S.TextIcons>
+          <S.Price>{price && `${price?.toFixed(2)} USDT`}</S.Price>
         </S.Button>
       </S.ButtonGroup>
     </S.Wrapper>

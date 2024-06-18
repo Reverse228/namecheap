@@ -1,6 +1,4 @@
-import { API_URL } from "@utils";
-import Cookies from "js-cookie";
-import axios from "axios";
+import { useApiCalls } from "@utils/hooks";
 
 export type MeUserApi = {
   id: string;
@@ -12,13 +10,10 @@ export type MeUserApi = {
   assetBalances: [
     {
       id: string;
-      assetName: string | null;
+      currency: string | null;
       balance: number | null;
       frozenBalance: number | null;
-      pair: {
-        baseCurrency: string | null;
-        quoteCurrency: string | null;
-      };
+      activePair: any | null;
       walletAddress: string | null;
     },
   ];
@@ -31,8 +26,14 @@ export type MeUserApi = {
       };
       amount: number | null;
       price: number | null;
-      orderType: string | null;
-      orderCategory: string | null;
+      orderType:
+        | "BUY"
+        | "SELL"
+        | "BUY_LIMIT"
+        | "SELL_LIMIT"
+        | "BUY_STOP"
+        | "SELL_STOP";
+      orderCategory: "OPTIONS" | "MARGIN" | "SPOT" | "FUTURES";
       margin: number | null;
       orderStatus: string | null;
       timestamp: string | null;
@@ -41,29 +42,10 @@ export type MeUserApi = {
   depositWallet: string | null;
 };
 
-export const MeUser = async (
-  setData?: (data: MeUserApi | string) => void,
-  params?: object,
-) => {
-  try {
-    const token = Cookies.get("token");
+export const useGetMe = () => {
+  const { data, isSuccess, isLoading } = useApiCalls<MeUserApi, MeUserApi>(
+    "auth/me",
+  );
 
-    await axios
-      .get(`${API_URL}/auth/me`, {
-        params,
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      })
-      .then(({ data }: { data: MeUserApi }) => {
-        setData && setData(data);
-
-        if (typeof data === "object") {
-          localStorage.setItem("userData", JSON.stringify(data));
-        }
-      });
-  } catch (e: any) {
-    setData && setData(e.message);
-  }
+  return { data, isSuccess, isLoading };
 };

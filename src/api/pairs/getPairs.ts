@@ -1,24 +1,14 @@
-import { API_URL } from "@utils";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { useApiCalls } from "@utils/hooks";
 
 export type GetPairsApi = {
   baseCurrency: string;
   quoteCurrency: string;
+  type: string;
+  lastPrice: number;
 }[];
 
-export const GetPairs = async (setData: (value: GetPairsApi) => void) => {
-  try {
-    const token = Cookies.get("token");
+export const GetPairs = () => {
+  const { data, isLoading } = useApiCalls<GetPairsApi, GetPairsApi>("pairs");
 
-    await axios
-      .get(`${API_URL}/pairs`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then(({ data }: { data: GetPairsApi }) => setData(data));
-  } catch (e) {
-    return null;
-  }
+  return { data, isLoading };
 };
