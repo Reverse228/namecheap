@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
+import { StyledProps } from "@components/TextField/types";
+import { css } from "@emotion/react";
 import { Theme } from "@utils";
 import { rgba } from "emotion-rgba";
-import { StyledProps } from "./types";
-import { css } from "@emotion/react";
 
 export const Wrapper = styled.div<StyledProps>`
   width: 100%;
@@ -16,7 +16,7 @@ export const Wrapper = styled.div<StyledProps>`
         color: ${Theme.colors.red};
       }
 
-      input {
+      select {
         border: 1px solid ${Theme.colors.red};
       }
     `}
@@ -28,7 +28,7 @@ export const Label = styled.p`
   color: ${rgba(Theme.colors.white, 0.8)};
 `;
 
-export const Input = styled.input`
+export const Select = styled.select`
   width: 100%;
   padding: 8px 10px;
   background: ${Theme.colors.paledBlue};

@@ -11,7 +11,7 @@ import { Theme } from "@utils";
 const MainWrapper: FC<Props> = (props) => {
   const { children, addMenu, addHeader, ...restProps } = props;
 
-  const { userData, router, balance, isLoading, isSuccess } = useMainWrapper();
+  const { router, balance, isLoading, isSuccess } = useMainWrapper();
   return (
     <S.Wrapper $addMenu={Boolean(addMenu)} {...restProps}>
       {addHeader && (
@@ -26,7 +26,9 @@ const MainWrapper: FC<Props> = (props) => {
                   >
                     Доступно:{" "}
                   </Typography>
-                  <Typography>{balance ?? "0.00"}</Typography>
+                  <Typography>
+                    {balance ? `${balance} USD` : "0.00 USD"}
+                  </Typography>
                 </S.CurrentBalance>
 
                 <Button

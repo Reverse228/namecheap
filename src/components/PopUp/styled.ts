@@ -11,13 +11,13 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${rgba(Theme.colors.darkBlue, 0.3)};
+  background: ${rgba(Theme.colors.darkBlue, 0.5)};
   backdrop-filter: blur(10px);
   z-index: 1;
 `;
 
 export const ContentWrapper = styled.div`
-  background: ${Theme.colors.paledBlueHover};
+  background: ${Theme.colors.blackBlueHover};
   border-radius: 4px;
   display: grid;
   min-width: 420px;

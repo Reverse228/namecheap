@@ -13,7 +13,7 @@ export const PostUser = () => {
     }
   >({
     onExecuteMutation: async (data) =>
-      await axiosMutation("post", `auth/register`),
+      await axiosMutation("post", `auth/register`, data),
     refetchQueries: ["auth/me"],
   });
 

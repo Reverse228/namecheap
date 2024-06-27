@@ -5,8 +5,11 @@ export const useWallet = () => {
 
   const balance = isLoading
     ? "-"
-    : userData?.assetBalances.find(({ currency }) => currency === "USDT")
+    : userData?.assetBalances.find(({ currency }) => currency === "USD")
         ?.balance ?? "0.00";
 
-  return { userData, balance };
+  return {
+    userData,
+    balance,
+  };
 };

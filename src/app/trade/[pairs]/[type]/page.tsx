@@ -58,6 +58,7 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
         bottomButton={{
           label: "Пополнить кошелек",
           variant: "active",
+          onClick: () => router.push("/profile/wallet"),
         }}
         header={"Сделка отменена"}
         messages={

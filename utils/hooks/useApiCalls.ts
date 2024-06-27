@@ -10,6 +10,7 @@ export function useApiCalls<GetProps, ReturnProps>(
   url: string,
   options?: UseQueryOptions<GetProps, Error, ReturnProps>,
   params?: object,
+  tokenNotRequired?: boolean,
 ) {
   const clearUrl = url.startsWith("/") ? url.substring(1) : url;
 
@@ -19,10 +20,12 @@ export function useApiCalls<GetProps, ReturnProps>(
     return axios
       .get(`${API_URL}/${url}`, {
         params,
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
+        headers: tokenNotRequired
+          ? { "Content-Type": "application/json" }
+          : {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
       })
       .then((res) => res.data);
   };

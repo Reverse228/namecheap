@@ -8,6 +8,7 @@ import { useLogInRegister } from "./hook";
 import Alert from "../Alert/Alert";
 import * as S from "./styled";
 import MainWrapper from "../MainWrapper/MainWrapper";
+import Select from "@components/Select/Select";
 
 const LogInRegister: FC<Props> = (props) => {
   const { variant } = props;
@@ -22,6 +23,7 @@ const LogInRegister: FC<Props> = (props) => {
     number,
     errorDesc,
     emailErr,
+    countries,
     handles: {
       handleConfirmPass,
       handleEmail,
@@ -38,7 +40,7 @@ const LogInRegister: FC<Props> = (props) => {
   return (
     <MainWrapper $gap="64px" $alignItems="center">
       {isSuccess && <Alert type="success" />}
-      {(equalsPass || emailErr) && (
+      {equalsPass && (
         <Alert type="error" description={errorDesc ?? "Пароли не совпадают"} />
       )}
       {errorLogIn && (
@@ -92,10 +94,10 @@ const LogInRegister: FC<Props> = (props) => {
             type="password"
             onChange={(e) => handleConfirmPass(e.target.value)}
           />
-          <TextField
+          <Select
             label="Страна"
             required
-            type="text"
+            data={countries}
             onChange={(e) => handleCity(e.target.value)}
           />
           <TextField

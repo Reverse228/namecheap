@@ -4,11 +4,11 @@ import MainWrapper from "@components/MainWrapper/MainWrapper";
 import { useHistory } from "@src/app/history/hook";
 
 const History = () => {
-  const {} = useHistory();
+  const { positionsData } = useHistory();
 
   return (
     <MainWrapper addMenu={{ active: "/history" }}>
-      <></>
+      <>{}</>
     </MainWrapper>
   );
 };

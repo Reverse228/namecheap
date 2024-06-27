@@ -26,7 +26,7 @@ export const useTrade = () => {
     sum?: string | undefined,
   ) => {
     const balance = Number(
-      userData?.assetBalances.find(({ currency }) => currency === "USDT")
+      userData?.assetBalances.find(({ currency }) => currency === "USD")
         ?.balance ?? 0,
     );
 

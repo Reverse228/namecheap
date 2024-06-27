@@ -14,6 +14,7 @@ import QrCodeSvg from "../../../public/svg/QrCodeSvg";
 import PopUp from "@components/PopUp/PopUp";
 import QRCode from "react-qr-code";
 import Alert from "@components/Alert/Alert";
+import TextField from "@components/TextField";
 
 const Profile = () => {
   const {
@@ -23,7 +24,19 @@ const Profile = () => {
     balance,
     openPopUp,
     alert,
-    handles: { handleExist, handleOpenQrCode, handleCopyAddress, handleAlert },
+    frozenBalance,
+    withdrawnPopUp,
+    withdrawnSum,
+    withdrawnWalletAddress,
+    handles: {
+      handleExist,
+      handleOpenQrCode,
+      handleCopyAddress,
+      handleAlert,
+      setWithdrawnPopUp,
+      handleWithdrawnSum,
+      handleWithdrawnWalletAddress,
+    },
   } = useProfile();
 
   return (
@@ -51,6 +64,32 @@ const Profile = () => {
         }
       />
 
+      <PopUp
+        appear={withdrawnPopUp}
+        closePopUp={() => setWithdrawnPopUp(false)}
+        header={"Вывод средств"}
+        messages={
+          <>
+            <TextField
+              label={"Сумма (USD)"}
+              onChange={(e) => handleWithdrawnSum(e.target.value)}
+              value={withdrawnSum}
+            />
+            <TextField
+              label={"Адресс кошелька"}
+              value={withdrawnWalletAddress}
+              onChange={(e) => handleWithdrawnWalletAddress(e.target.value)}
+            />
+          </>
+        }
+        bottomButton={{
+          label: "Вывести",
+          onClick: () => setWithdrawnPopUp(false),
+          variant: "active",
+          disable: !withdrawnSum || !withdrawnWalletAddress,
+        }}
+      />
+
       <S.Header>
         {isSuccess && (
           <>
@@ -67,15 +106,19 @@ const Profile = () => {
             Текущий баланс
           </Typography>
           <Typography>
-            {isSuccess ? (balance ? `${balance} USD` : "-") : "-"}
+            {isSuccess ? (balance !== undefined ? `${balance} USD` : "-") : "-"}
           </Typography>
         </S.BalanceRow>
         <S.BalanceRow>
           <Typography $fontSize={"14px"} $color={rgba(Theme.colors.white, 0.6)}>
-            Открытый P/L
+            Замороженный баланс
           </Typography>
           <Typography>
-            {isSuccess ? (balance ? `${balance} USD` : "-") : "-"}
+            {isSuccess
+              ? frozenBalance !== undefined
+                ? `${frozenBalance} USD`
+                : "-"
+              : "-"}
           </Typography>
         </S.BalanceRow>
       </S.ContentWrapper>
@@ -87,7 +130,7 @@ const Profile = () => {
           </Typography>
 
           <S.WalletGroup>
-            <Typography>
+            <Typography $fontSize={"14px"}>
               {isSuccess ? (balance ? userData?.depositWallet : "-") : "-"}
             </Typography>
             {isSuccess && (
@@ -112,21 +155,69 @@ const Profile = () => {
         </S.BalanceRow>
       </S.ContentWrapper>
       {isSuccess ? (
-        <S.ButtonGroup $direction={"column"}>
-          <Button
-            label="Пополнить баланс"
-            $variant="active"
-            onClick={() => router.push("/profile/wallet")}
-            $maxWith
-          />
-          <Button label="Запросить поддержку" $maxWith />
-          <Button
-            label={"Выйти из системы"}
-            $maxWith
-            onClick={handleExist}
-            $margin={"24px 0 0 0"}
-          />
-        </S.ButtonGroup>
+        <>
+          <S.ButtonGroup>
+            <Button
+              label="Пополнить баланс"
+              $variant="active"
+              onClick={() => router.push("/profile/wallet")}
+              $maxWith
+            />
+            <Button
+              label="Вывести средства"
+              onClick={() => setWithdrawnPopUp(true)}
+              $maxWith
+            />
+          </S.ButtonGroup>
+          <Typography
+            $color={`${rgba(Theme.colors.white, 0.8)}`}
+            $margin={"36px 0 6px 2px"}
+          >
+            Данные пользователя
+          </Typography>
+          <S.ContentWrapper>
+            <S.BalanceRow>
+              <Typography
+                $fontSize={"14px"}
+                $color={rgba(Theme.colors.white, 0.6)}
+              >
+                Имя
+              </Typography>
+              <Typography>{userData?.name}</Typography>
+            </S.BalanceRow>
+            <S.BalanceRow>
+              <Typography
+                $fontSize={"14px"}
+                $color={rgba(Theme.colors.white, 0.6)}
+              >
+                Почта
+              </Typography>
+              <Typography>{userData?.email}</Typography>
+            </S.BalanceRow>
+            <S.BalanceRow>
+              <Typography
+                $fontSize={"14px"}
+                $color={rgba(Theme.colors.white, 0.6)}
+              >
+                Номер
+              </Typography>
+              <Typography>{userData?.phone}</Typography>
+            </S.BalanceRow>
+            <S.BalanceRow>
+              <Typography
+                $fontSize={"14px"}
+                $color={rgba(Theme.colors.white, 0.6)}
+              >
+                Страна
+              </Typography>
+              <Typography>{userData?.country}</Typography>
+            </S.BalanceRow>
+          </S.ContentWrapper>
+          <S.ButtonGroup $direction={"column"}>
+            <Button label="Запросить поддержку" $maxWith />
+            <Button label={"Выйти из системы"} $maxWith onClick={handleExist} />
+          </S.ButtonGroup>
+        </>
       ) : (
         <S.ButtonGroup>
           <Button

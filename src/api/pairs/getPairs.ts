@@ -8,7 +8,12 @@ export type GetPairsApi = {
 }[];
 
 export const GetPairs = () => {
-  const { data, isLoading } = useApiCalls<GetPairsApi, GetPairsApi>("pairs");
+  const { data, isLoading } = useApiCalls<GetPairsApi, GetPairsApi>(
+    "pairs",
+    undefined,
+    undefined,
+    true,
+  );
 
   return { data, isLoading };
 };
