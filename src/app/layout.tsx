@@ -1,11 +1,12 @@
 "use client";
 
-import { Inter } from "next/font/google";
+import { Rubik } from "next/font/google";
 import "@utils/theme/css/globalStyled.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useMemo } from "react";
 import Head from "next/head";
-const inter = Inter({ subsets: ["latin"] });
+
+const rubik = Rubik({ subsets: ["latin"] });
 
 export default function RootLayout({
   children,
@@ -34,7 +35,7 @@ export default function RootLayout({
         <Head>
           <title>Name of site</title>
         </Head>
-        <body className={inter.className}>{children}</body>
+        <body className={rubik.className}>{children}</body>
       </html>
     </QueryClientProvider>
   );

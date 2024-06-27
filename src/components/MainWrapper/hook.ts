@@ -5,7 +5,7 @@ export const useMainWrapper = () => {
   const { data: userData, isLoading, isSuccess } = useGetMe();
 
   const balance = userData?.assetBalances.find(
-    ({ currency }) => currency === "USDT",
+    ({ currency }) => currency === "USD",
   )?.balance;
 
   const router = useRouter();

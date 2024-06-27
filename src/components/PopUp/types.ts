@@ -9,5 +9,6 @@ export type Props = {
     label: string;
     onClick?: () => void;
     variant?: "simple" | "active";
+    disable?: boolean;
   };
 };

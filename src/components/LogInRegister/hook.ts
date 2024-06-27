@@ -1,4 +1,4 @@
-import { LogInUser, PostUser } from "@api";
+import { LogInUser, PostUser, useGetCountry } from "@api";
 import { setToken } from "@utils/functions";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -26,6 +26,8 @@ export const useLogInRegister = () => {
   const { executeMutation: logIn, data: logInData } = LogInUser();
   const { executeMutation: register, data: registerData } = PostUser();
 
+  const { data: countries } = useGetCountry();
+
   const activeRegButton = Boolean(
     name && surname && email && pass && confirmPass,
   );
@@ -43,8 +45,18 @@ export const useLogInRegister = () => {
   const handleEmail = (value: string) => {
     setEmail(value);
 
+    const correctEmail = value
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      );
     setErrorLogIn(false);
-    setEmailErr(false);
+
+    if (correctEmail || value === "") {
+      setEmailErr(false);
+    } else {
+      setEmailErr(true);
+    }
   };
 
   const handlePass = (value: string) => {
@@ -64,7 +76,9 @@ export const useLogInRegister = () => {
   };
 
   const handleNumber = (value: string) => {
-    setNumber(value);
+    const normalNumber = value.replace(/[^\d.+]|(?<!^)\+/g, "");
+
+    setNumber(normalNumber);
   };
 
   const handelRegister = async () => {
@@ -132,6 +146,7 @@ export const useLogInRegister = () => {
     number,
     errorDesc,
     emailErr,
+    countries,
     handles: {
       handleConfirmPass,
       handleEmail,

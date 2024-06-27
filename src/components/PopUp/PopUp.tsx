@@ -24,8 +24,9 @@ const PopUp: FC<Props> = (props) => {
             </Typography>
             <Button
               label={""}
-              $bg={rgba(Theme.colors.lightBlue, 0.4)}
+              $bg={rgba(Theme.colors.red, 0.8)}
               onClick={closePopUp}
+              $padding={"8px"}
             >
               <SvgIcon>
                 <CloseSvg />
@@ -39,6 +40,7 @@ const PopUp: FC<Props> = (props) => {
                 label={bottomButton.label}
                 $variant={bottomButton.variant}
                 onClick={bottomButton.onClick}
+                disable={bottomButton.disable}
                 $maxWith
               />
             )}

@@ -129,7 +129,7 @@ const Pair: FC<Props> = (props) => {
             </SvgIcon>
             <Typography>Продать </Typography>
           </S.TextIcons>
-          <S.Price>{price && `${price?.toFixed(2)} USDT`}</S.Price>
+          <S.Price>{price && `${price?.toFixed(2)} USD`}</S.Price>
         </S.Button>
         <S.Button
           $disable={disableButtons || (buy && sum === "0") || sum === ""}
@@ -149,7 +149,7 @@ const Pair: FC<Props> = (props) => {
             </SvgIcon>
             <Typography>Купить</Typography>
           </S.TextIcons>
-          <S.Price>{price && `${price?.toFixed(2)} USDT`}</S.Price>
+          <S.Price>{price && `${price?.toFixed(2)} USD`}</S.Price>
         </S.Button>
       </S.ButtonGroup>
     </S.Wrapper>

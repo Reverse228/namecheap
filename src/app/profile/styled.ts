@@ -35,6 +35,10 @@ export const WalletGroup = styled.div`
   display: flex;
   gap: 8px;
   align-items: center;
+
+  p {
+    word-break: break-all;
+  }
 `;
 
 export const ButtonGroup = styled.div<{ $direction?: string }>`
