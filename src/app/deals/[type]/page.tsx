@@ -49,16 +49,16 @@ const Deals = ({ params }: { params: { type: string } }) => {
 
       <S.ButtonGroup $gap={"8px"}>
         <Button
+          label={"Завершеные"}
+          $maxWith
+          $bg={params.type === "completed" ? Theme.colors.lightBlue : undefined}
+          onClick={() => handleChangeType("completed")}
+        />
+        <Button
           label={"Открытые"}
           $maxWith
           $bg={params.type === "open" ? Theme.colors.lightBlue : undefined}
           onClick={() => handleChangeType("open")}
-        />
-        <Button
-          label={"Отложенные"}
-          $maxWith
-          $bg={params.type === "pending" ? Theme.colors.lightBlue : undefined}
-          onClick={() => handleChangeType("pending")}
         />
       </S.ButtonGroup>
 
@@ -75,7 +75,7 @@ const Deals = ({ params }: { params: { type: string } }) => {
           {filteredData?.length ? (
             filteredData?.map(
               ({
-                pair,
+                activePair,
                 amount,
                 price,
                 orderStatus,
@@ -89,7 +89,7 @@ const Deals = ({ params }: { params: { type: string } }) => {
                   <S.Row key={id}>
                     <S.Header>
                       <S.Name $fontSize={"18px"}>
-                        {pair.baseCurrency} / {pair.quoteCurrency}
+                        {activePair.baseCurrency} / {activePair.quoteCurrency}
                       </S.Name>
                       {orderStatus === "OPEN" ? (
                         <S.CloseButton
@@ -120,7 +120,7 @@ const Deals = ({ params }: { params: { type: string } }) => {
                           Сумма:
                         </Typography>
                         <Typography $color={rgba(Theme.colors.white, 0.8)}>
-                          {amount}
+                          {`${amount} ${activePair.baseCurrency}`}
                         </Typography>
                       </S.Names>
                       <S.Names>
@@ -164,7 +164,9 @@ const Deals = ({ params }: { params: { type: string } }) => {
                           Статус:
                         </Typography>
                         <Typography $color={rgba(Theme.colors.white, 0.8)}>
-                          {orderStatus}
+                          {orderStatus === "COMPLETED"
+                            ? "Завершено"
+                            : "Открытый"}
                         </Typography>
                       </S.Names>
                       <S.Names>

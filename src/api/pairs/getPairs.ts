@@ -10,7 +10,11 @@ export type GetPairsApi = {
 export const GetPairs = () => {
   const { data, isLoading } = useApiCalls<GetPairsApi, GetPairsApi>(
     "pairs",
-    undefined,
+    {
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true,
+    },
     undefined,
     true,
   );

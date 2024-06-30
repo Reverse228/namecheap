@@ -10,7 +10,7 @@ import Pair from "@src/components/Pair/Pair";
 import Button from "@src/components/Button/Button";
 import PopUp from "@components/PopUp/PopUp";
 import Alert from "@src/components/Alert/Alert";
-import { ComponentType, useEffect, useState } from "react";
+import { ComponentType } from "react";
 import Typography from "@components/Typography/Typography";
 import { rgba } from "emotion-rgba";
 import { Theme } from "@utils";
@@ -33,8 +33,13 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
     notFounds,
     isSuccess,
     isLoading,
-    handles: { handleTrade, handleNotFounds, handleAlertMessage },
-  } = useTrade();
+    handles: {
+      handleTrade,
+      handleNotFounds,
+      handleAlertMessage,
+      handleSumOfInvesting,
+    },
+  } = useTrade(params.pairs);
 
   return (
     <MainWrapper
@@ -78,6 +83,7 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
             onCLickSell={(priceBuy, sum) =>
               handleTrade("SELL", params.pairs, sum)
             }
+            getSum={(value) => handleSumOfInvesting(value)}
             disableButtons={!isSuccess}
             quoteCurrency={params.pairs.split("-")[0]}
             baseCurrency={params.pairs.split("-")[1]}

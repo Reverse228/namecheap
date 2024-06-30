@@ -1,14 +1,24 @@
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetUserData } from "@utils/hooks";
-import { PostOrder, SendOrderProps, useGetMe } from "@api";
+import {
+  GetPairs,
+  PostOrder,
+  SendOrderProps,
+  useGetMe,
+  usePostCalculateProfitOrLose,
+} from "@api";
 
-export const useTrade = () => {
+export const useTrade = (pair: string) => {
   const [notFounds, setNotFounds] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [sumOfInvesting, setSumOfInvesting] = useState<number>(0);
 
   const { data: userData, isSuccess, isLoading } = useGetMe();
   const { executeMutation, data: postOrderData } = PostOrder();
+  const { executeMutation: calculateProfit, data } =
+    usePostCalculateProfitOrLose();
+  const { data: pairsData } = GetPairs();
 
   const router = useRouter();
 
@@ -18,6 +28,10 @@ export const useTrade = () => {
 
   const handleNotFounds = (value: boolean) => {
     setNotFounds(value);
+  };
+
+  const handleSumOfInvesting = (value: number) => {
+    setSumOfInvesting(value);
   };
 
   const handleTrade = (
@@ -33,24 +47,38 @@ export const useTrade = () => {
     if (balance <= 0) {
       handleNotFounds(true);
     } else {
-      const time = new Date();
+      const lastPrice = pairsData?.find(
+        ({ baseCurrency, quoteCurrency }) =>
+          quoteCurrency === pair.split("-")[0] &&
+          baseCurrency === pair.split("-")[1],
+      )?.lastPrice;
+
+      const pairFilter = "";
+
       const sendDate: SendOrderProps = {
-        pair: {
-          baseCurrency: pair.split("-")[1] ?? "",
-          quoteCurrency: pair.split("-")[0] ?? "",
-        },
-        amount: Number(sum) ?? 0,
-        price: 0,
+        pair: `${pair.split("-")[0]}-${pair.split("-")[1]}`,
+        amount: Number(sum),
         orderType: type,
+        price: lastPrice ?? 0,
+        margin: 1,
         orderCategory: "SPOT",
-        margin: 0,
-        orderStatus: "OPEN",
-        timestamp: time,
       };
 
       executeMutation(sendDate);
     }
   };
+
+  //TODO: finish calculateOfProfit
+  // useEffect(() => {
+  //   if (sumOfInvesting > 0) {
+  //     const data = {
+  //       pair: `${pair.split("-")[0]}/${pair.split("-")[1]}`,
+  //       amount: sumOfInvesting,
+  //     };
+  //
+  //     calculateProfit(data);
+  //   }
+  // }, [sumOfInvesting]);
 
   return {
     router,
@@ -62,6 +90,7 @@ export const useTrade = () => {
       handleTrade,
       handleNotFounds,
       handleAlertMessage,
+      handleSumOfInvesting,
     },
   };
 };

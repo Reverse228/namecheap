@@ -19,6 +19,7 @@ const Pair: FC<Props> = (props) => {
     onClickBuy,
     onCLickSell,
     price,
+    getSum,
   } = props;
 
   const {
@@ -26,12 +27,12 @@ const Pair: FC<Props> = (props) => {
     sum,
 
     handles: { handleSum },
-  } = usePair(baseCurrency, quoteCurrency);
+  } = usePair(getSum);
 
   return (
     <S.Wrapper>
       <Typography $fontSize="18px">
-        {quoteCurrency} / {baseCurrency}
+        {baseCurrency} / {quoteCurrency}
       </Typography>
 
       {buy?.path && (
@@ -84,9 +85,11 @@ const Pair: FC<Props> = (props) => {
                   value={sum}
                   onFocus={() => sum === "0" && handleSum("")}
                   onBlur={() => sum === "" && handleSum("0")}
-                  onChange={(e) => handleSum(e.target.value)}
+                  onChange={(e) => {
+                    handleSum(e.target.value);
+                  }}
                 />
-                <Typography>{quoteCurrency}</Typography>
+                <Typography>{baseCurrency}</Typography>
               </S.InputWrapper>
             </S.CustomInputWrapper>
             {buy?.path === "pending-transaction" && (

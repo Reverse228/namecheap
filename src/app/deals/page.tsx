@@ -7,7 +7,7 @@ const DealRedirect = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("deals/open");
+    router.replace("deals/completed");
   }, []);
 
   return <></>;

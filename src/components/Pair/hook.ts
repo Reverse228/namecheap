@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export const usePair = (baseCurrency?: string, quoteCurrency?: string) => {
+export const usePair = (getSum?: (value: number) => void) => {
   const router = useRouter();
 
   const [sum, setSum] = useState<string>("0");
@@ -10,6 +10,7 @@ export const usePair = (baseCurrency?: string, quoteCurrency?: string) => {
     const numericValue = value.replace(/[^\d.]/g, "");
 
     setSum(numericValue);
+    getSum && getSum(Number(numericValue));
   };
 
   return {

@@ -27,7 +27,9 @@ export const CustomButton = styled(Button)`
 
 export const RowsWrapper = styled.div`
   width: 100%;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 16px;
   margin-top: 12px;
   align-content: center;

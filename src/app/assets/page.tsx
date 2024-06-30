@@ -17,7 +17,6 @@ import * as S from "./styled";
 const Assets = () => {
   const {
     searchData,
-    userData,
     isLoading,
     isSuccessUserData,
     isLoadingUserData,

@@ -20,8 +20,10 @@ export type MeUserApi = {
   orders: [
     {
       id: string | null;
-      pair: {
+      activePair: {
         baseCurrency: string | null;
+        lastPrice: number | null;
+        type: string;
         quoteCurrency: string | null;
       };
       amount: number | null;

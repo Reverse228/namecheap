@@ -131,7 +131,7 @@ const Profile = () => {
 
           <S.WalletGroup>
             <Typography $fontSize={"14px"}>
-              {isSuccess ? (balance ? userData?.depositWallet : "-") : "-"}
+              {isSuccess ? userData?.depositWallet ?? "-" : "-"}
             </Typography>
             {isSuccess && (
               <>

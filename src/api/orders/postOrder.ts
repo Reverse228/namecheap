@@ -2,10 +2,7 @@ import { useMutationSideEffects } from "@utils/hooks";
 import { axiosMutation } from "@functions";
 
 export type SendOrderProps = {
-  pair: {
-    baseCurrency: string;
-    quoteCurrency: string;
-  };
+  pair: string;
   amount: number;
   price: number;
   orderType:
@@ -17,8 +14,6 @@ export type SendOrderProps = {
     | "SELL_STOP";
   orderCategory: "MARGIN" | "SPOT" | "FUTURES" | "OPTIONS";
   margin: number;
-  orderStatus: string;
-  timestamp: Date;
 };
 
 export const PostOrder = () => {

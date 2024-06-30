@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 
 type FilterData = {
   id: string | null;
-  pair: {
+  activePair: {
     baseCurrency: string | null;
+    lastPrice: number | null;
+    type: string;
     quoteCurrency: string | null;
   };
   amount: number | null;
@@ -35,7 +37,9 @@ export const useDeals = (params: { type: string }) => {
     undefined,
   );
 
-  const handleChangeType = (type: "open" | "pending") => {
+  console.log(userData?.orders, filteredData);
+
+  const handleChangeType = (type: "completed" | "open") => {
     router.replace(type);
   };
 
@@ -52,18 +56,18 @@ export const useDeals = (params: { type: string }) => {
   };
 
   useEffect(() => {
-    if (params.type === "open") {
+    if (params.type === "completed") {
+      const filterData = userData?.orders.filter(
+        ({ orderStatus }) => orderStatus === "COMPLETED",
+      );
+      setFilteredData(filterData);
+    } else if (params.type === "open") {
       const filterData = userData?.orders.filter(
         ({ orderStatus }) => orderStatus === "OPEN",
       );
       setFilteredData(filterData);
-    } else if (params.type === "pending") {
-      const filterData = userData?.orders.filter(
-        ({ orderStatus }) => orderStatus === "CANCELLED",
-      );
-      setFilteredData(filterData);
     }
-  }, [params.type]);
+  }, [params.type, userData?.orders]);
 
   return {
     router,
