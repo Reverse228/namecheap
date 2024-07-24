@@ -30,6 +30,8 @@ const Deals = ({ params }: { params: { type: string } }) => {
       addMenu={{
         active: "/deals",
       }}
+      addHeader
+      $gap={"24px"}
       $alignItems={"center"}
     >
       <PopUp

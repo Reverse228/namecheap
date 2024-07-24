@@ -4,16 +4,17 @@ import MainWrapper from "@src/components/MainWrapper/MainWrapper";
 import { useTrade } from "./hook";
 import { AdvancedRealTimeChartProps } from "react-ts-tradingview-widgets";
 import dynamic from "next/dynamic";
+import { ComponentType, memo, useCallback, useMemo } from "react";
 
 import * as S from "./styled";
 import Pair from "@src/components/Pair/Pair";
 import Button from "@src/components/Button/Button";
 import PopUp from "@components/PopUp/PopUp";
 import Alert from "@src/components/Alert/Alert";
-import { ComponentType } from "react";
 import Typography from "@components/Typography/Typography";
 import { rgba } from "emotion-rgba";
 import { Theme } from "@utils";
+import Graph from "@src/app/trade/[pairs]/[type]/Graph";
 
 const AdvancedRealTimeChart: ComponentType<AdvancedRealTimeChartProps> =
   dynamic(
@@ -26,6 +27,8 @@ const AdvancedRealTimeChart: ComponentType<AdvancedRealTimeChartProps> =
     },
   );
 
+const MemoizedAdvancedRealTimeChart = memo(AdvancedRealTimeChart);
+
 const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
   const {
     router,
@@ -33,6 +36,7 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
     notFounds,
     isSuccess,
     isLoading,
+    graphData,
     handles: {
       handleTrade,
       handleNotFounds,
@@ -40,6 +44,18 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
       handleSumOfInvesting,
     },
   } = useTrade(params.pairs);
+
+  const handleNotFoundsMemoized = useCallback(
+    () => handleNotFounds(false),
+    [handleNotFounds],
+  );
+
+  const routerPushWallet = useCallback(
+    () => router.push("/profile/wallet"),
+    [router],
+  );
+
+  const memoizedGraphData = useMemo(() => graphData, [graphData]);
 
   return (
     <MainWrapper
@@ -59,11 +75,11 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
 
       <PopUp
         appear={notFounds}
-        closePopUp={() => handleNotFounds(false)}
+        closePopUp={handleNotFoundsMemoized}
         bottomButton={{
           label: "Пополнить кошелек",
           variant: "active",
-          onClick: () => router.push("/profile/wallet"),
+          onClick: routerPushWallet,
         }}
         header={"Сделка отменена"}
         messages={
@@ -101,7 +117,7 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
               </S.NoUser>
             )}
             {params.pairs ? (
-              <AdvancedRealTimeChart
+              <MemoizedAdvancedRealTimeChart
                 theme="dark"
                 hide_side_toolbar
                 autosize
@@ -116,7 +132,7 @@ const Trade = ({ params }: { params: { pairs: string; type: string } }) => {
                   "border_around_the_chart",
                 ]}
                 allow_symbol_change={false}
-                symbol={params.pairs.split("-").reverse().join("")}
+                symbol={memoizedGraphData}
                 save_image={false}
               />
             ) : (

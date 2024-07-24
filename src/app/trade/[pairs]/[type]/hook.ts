@@ -12,6 +12,7 @@ import {
 export const useTrade = (pair: string) => {
   const [notFounds, setNotFounds] = useState<boolean>(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [graphData, setGraphData] = useState<string | undefined>(undefined);
   const [sumOfInvesting, setSumOfInvesting] = useState<number>(0);
 
   const { data: userData, isSuccess, isLoading } = useGetMe();
@@ -56,7 +57,7 @@ export const useTrade = (pair: string) => {
       const pairFilter = "";
 
       const sendDate: SendOrderProps = {
-        pair: `${pair.split("-")[0]}-${pair.split("-")[1]}`,
+        pair: `${pair.split("-")[1]}-${pair.split("-")[0]}`,
         amount: Number(sum),
         orderType: type,
         price: lastPrice ?? 0,
@@ -80,12 +81,31 @@ export const useTrade = (pair: string) => {
   //   }
   // }, [sumOfInvesting]);
 
+  useEffect(() => {
+    if (pairsData) {
+      const graphPair = pairsData?.find(
+        ({ baseCurrency, quoteCurrency }) =>
+          quoteCurrency === pair.split("-")[0] &&
+          baseCurrency === pair.split("-")[1],
+      );
+
+      const typeOfPair = graphPair?.type;
+
+      if (typeOfPair === "index") {
+        setGraphData(graphPair?.baseCurrency);
+      } else {
+        setGraphData(`${graphPair?.baseCurrency}${graphPair?.quoteCurrency}`);
+      }
+    }
+  }, []);
+
   return {
     router,
     alertMessage,
     notFounds,
     isSuccess,
     isLoading,
+    graphData,
     handles: {
       handleTrade,
       handleNotFounds,

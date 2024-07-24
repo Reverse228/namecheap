@@ -3,7 +3,7 @@ import { StyledProps } from "./types";
 import { css } from "@emotion/react";
 
 export const Text = styled.p<StyledProps>`
-  ${({ $fontSize, $color, $margin }) => css`
+  ${({ $fontSize, $color, $margin, $fontWeight }) => css`
     margin: ${$margin ?? 0};
 
     ${$fontSize &&
@@ -14,6 +14,11 @@ export const Text = styled.p<StyledProps>`
     ${$color &&
     css`
       color: ${$color};
+    `}
+
+    ${$fontWeight &&
+    css`
+      font-weight: ${$fontWeight};
     `}
   `}
 `;

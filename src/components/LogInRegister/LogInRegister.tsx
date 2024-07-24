@@ -9,6 +9,7 @@ import Alert from "../Alert/Alert";
 import * as S from "./styled";
 import MainWrapper from "../MainWrapper/MainWrapper";
 import Select from "@components/Select/Select";
+import Loader from "@components/Loader/Loader";
 
 const LogInRegister: FC<Props> = (props) => {
   const { variant } = props;
@@ -24,6 +25,7 @@ const LogInRegister: FC<Props> = (props) => {
     errorDesc,
     emailErr,
     countries,
+    isLoadingLogIn,
     handles: {
       handleConfirmPass,
       handleEmail,
@@ -133,13 +135,15 @@ const LogInRegister: FC<Props> = (props) => {
             onChange={(e) => handlePass(e.target.value)}
           />
           <Button
-            label="Войти"
+            label={isLoadingLogIn ? "" : "Войти"}
             $margin="24px 0 0 0"
             $maxWith
             $variant="active"
             disable={!activeLogInButton}
             onClick={handleLogIn}
-          />
+          >
+            {isLoadingLogIn && <Loader $height={"19px"} />}
+          </Button>
         </S.TextFieldForm>
       )}
     </MainWrapper>

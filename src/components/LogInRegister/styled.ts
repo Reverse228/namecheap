@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import MainWrapper from "../MainWrapper/MainWrapper";
 
 export const MainButton = styled.div`
   display: flex;

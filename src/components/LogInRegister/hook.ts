@@ -2,11 +2,10 @@ import { LogInUser, PostUser, useGetCountry } from "@api";
 import { setToken } from "@utils/functions";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { MeUserApi } from "@src/api/user/meUser";
-import Cookies from "js-cookie";
 
 export const useLogInRegister = () => {
   const router = useRouter();
+  const { data: countries } = useGetCountry();
 
   const [name, setName] = useState<string | null>(null);
   const [surname, setSurname] = useState<string | null>(null);
@@ -23,10 +22,14 @@ export const useLogInRegister = () => {
   const [errorDesc, setErrorDesc] = useState<string | null>(null);
   const [emailErr, setEmailErr] = useState<boolean>(false);
 
-  const { executeMutation: logIn, data: logInData } = LogInUser();
+  const {
+    executeMutation: logIn,
+    data: logInData,
+    isLoading: isLoadingLogIn,
+    isSuccess: isSuccessLogIn,
+    error: logInError,
+  } = LogInUser();
   const { executeMutation: register, data: registerData } = PostUser();
-
-  const { data: countries } = useGetCountry();
 
   const activeRegButton = Boolean(
     name && surname && email && pass && confirmPass,
@@ -72,6 +75,7 @@ export const useLogInRegister = () => {
   };
 
   const handleCity = (value: string) => {
+    console.log(value);
     setCountry(value);
   };
 
@@ -88,7 +92,6 @@ export const useLogInRegister = () => {
       name &&
       surname &&
       confirmPass &&
-      country &&
       number.startsWith("+")
     ) {
       if (pass === confirmPass) {
@@ -98,7 +101,7 @@ export const useLogInRegister = () => {
           email,
           password: pass,
           phone: number,
-          country,
+          country: country ?? countries[0],
           name: `${name} ${surname}`,
         };
 
@@ -122,7 +125,7 @@ export const useLogInRegister = () => {
         if (data) {
           setTimeout(() => {
             router.push("/assets");
-          }, 200);
+          }, 300);
         }
       });
     };
@@ -136,6 +139,16 @@ export const useLogInRegister = () => {
     }
   }, [logInData, registerData]);
 
+  useEffect(() => {
+    if (logInError?.response?.data?.data) {
+      if (
+        logInError?.response?.data?.data.toString().includes("UNAUTHORIZED")
+      ) {
+        setErrorLogIn(true);
+      }
+    }
+  }, [logInError]);
+
   return {
     router,
     activeRegButton,
@@ -147,6 +160,8 @@ export const useLogInRegister = () => {
     errorDesc,
     emailErr,
     countries,
+    isLoadingLogIn,
+    isSuccessLogIn,
     handles: {
       handleConfirmPass,
       handleEmail,
