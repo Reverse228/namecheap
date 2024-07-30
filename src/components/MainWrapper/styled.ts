@@ -37,6 +37,7 @@ export const TopLine = styled.div`
 export const CurrentBalance = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
 `;
 

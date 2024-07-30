@@ -37,8 +37,6 @@ export const useDeals = (params: { type: string }) => {
     undefined,
   );
 
-  console.log(userData?.orders, filteredData);
-
   const handleChangeType = (type: "completed" | "open") => {
     router.replace(type);
   };
@@ -57,14 +55,16 @@ export const useDeals = (params: { type: string }) => {
 
   useEffect(() => {
     if (params.type === "completed") {
-      const filterData = userData?.orders.filter(
-        ({ orderStatus }) => orderStatus === "COMPLETED",
-      );
+      const filterData = userData?.orders
+        .reverse()
+        .filter(({ orderStatus }) => orderStatus === "COMPLETED");
+
       setFilteredData(filterData);
     } else if (params.type === "open") {
-      const filterData = userData?.orders.filter(
-        ({ orderStatus }) => orderStatus === "OPEN",
-      );
+      const filterData = userData?.orders
+        .reverse()
+        .filter(({ orderStatus }) => orderStatus === "OPEN");
+
       setFilteredData(filterData);
     }
   }, [params.type, userData?.orders]);

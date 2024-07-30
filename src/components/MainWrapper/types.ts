@@ -12,4 +12,5 @@ export type Props = StyledProps & {
   addMenu?: {
     active: "/assets" | "/trade" | "/deals" | "/profile" | "/history" | false;
   };
+  secondCurrency?: string | null;
 };

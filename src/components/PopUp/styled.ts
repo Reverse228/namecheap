@@ -37,9 +37,9 @@ export const Wrapper = styled.div<{ $appear?: boolean }>`
     align-items: center;
     justify-content: center;
     z-index: 1;
-    transition: 0.4s;
+    transition: 0.2s;
     animation-name: ${PopUpAppear};
-    animation-duration: 0.4s;
+    animation-duration: 0.2s;
 
     background: ${$appear
       ? rgba(Theme.colors.darkBlue, 0.5)
@@ -57,7 +57,7 @@ export const ContentWrapper = styled.div<{ $appear?: boolean }>`
     min-width: 420px;
     max-width: 420px;
     z-index: 10;
-    transition: 0.4s;
+    transition: 0.2s;
     opacity: ${$appear ? 1 : 0};
     transform: scale(${$appear ? 1 : 0.8});
   `}

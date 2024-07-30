@@ -18,16 +18,16 @@ const Pair: FC<Props> = (props) => {
     buy,
     onClickBuy,
     onCLickSell,
-    price,
+    price: priceStart,
     getSum,
   } = props;
 
   const {
     router,
     sum,
-
-    handles: { handleSum },
-  } = usePair(getSum);
+    price,
+    handles: { handleSum, handlePrice },
+  } = usePair(getSum, priceStart);
 
   return (
     <S.Wrapper>
@@ -103,8 +103,10 @@ const Pair: FC<Props> = (props) => {
                 <S.InputWrapper>
                   <S.Input
                     value={price}
-                    // onFocus={() => handlePrice("")}
-                    // onChange={(e) => handlePrice(e.target.value)}
+                    onBlur={() =>
+                      price === "" && handlePrice(priceStart?.toString() ?? "0")
+                    }
+                    onChange={(e) => handlePrice(e.target.value)}
                   />
                 </S.InputWrapper>
               </S.CustomInputWrapper>
@@ -120,7 +122,7 @@ const Pair: FC<Props> = (props) => {
           onClick={() =>
             !disableButtons &&
             (onCLickSell
-              ? onCLickSell(0, sum)
+              ? onCLickSell(Number(price), sum)
               : router.push(
                   `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`,
                 ))
@@ -132,7 +134,10 @@ const Pair: FC<Props> = (props) => {
             </SvgIcon>
             <Typography>Продать </Typography>
           </S.TextIcons>
-          <S.Price>{price && `${price?.toFixed(2)} USD`}</S.Price>
+          <S.Price>
+            {priceStart &&
+              `${priceStart > 0 ? priceStart?.toFixed(2) : priceStart?.toFixed(4)} USD`}
+          </S.Price>
         </S.Button>
         <S.Button
           $disable={disableButtons || (buy && sum === "0") || sum === ""}
@@ -140,7 +145,7 @@ const Pair: FC<Props> = (props) => {
           onClick={() =>
             !disableButtons &&
             (onClickBuy
-              ? onClickBuy(0, sum)
+              ? onClickBuy(Number(price), sum)
               : router.push(
                   `/trade/${quoteCurrency}-${baseCurrency}/market-transaction`,
                 ))
@@ -152,7 +157,10 @@ const Pair: FC<Props> = (props) => {
             </SvgIcon>
             <Typography>Купить</Typography>
           </S.TextIcons>
-          <S.Price>{price && `${price?.toFixed(2)} USD`}</S.Price>
+          <S.Price>
+            {priceStart &&
+              `${priceStart > 0 ? priceStart?.toFixed(2) : priceStart?.toFixed(4)} USD`}
+          </S.Price>
         </S.Button>
       </S.ButtonGroup>
     </S.Wrapper>

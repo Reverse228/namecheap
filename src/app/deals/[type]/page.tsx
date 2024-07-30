@@ -51,16 +51,16 @@ const Deals = ({ params }: { params: { type: string } }) => {
 
       <S.ButtonGroup $gap={"8px"}>
         <Button
-          label={"Завершеные"}
-          $maxWith
-          $bg={params.type === "completed" ? Theme.colors.lightBlue : undefined}
-          onClick={() => handleChangeType("completed")}
-        />
-        <Button
           label={"Открытые"}
           $maxWith
           $bg={params.type === "open" ? Theme.colors.lightBlue : undefined}
           onClick={() => handleChangeType("open")}
+        />
+        <Button
+          label={"Завершеные"}
+          $maxWith
+          $bg={params.type === "completed" ? Theme.colors.lightBlue : undefined}
+          onClick={() => handleChangeType("completed")}
         />
       </S.ButtonGroup>
 

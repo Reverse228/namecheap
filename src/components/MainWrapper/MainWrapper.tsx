@@ -9,7 +9,7 @@ import { rgba } from "emotion-rgba";
 import { Theme } from "@utils";
 
 const MainWrapper: FC<Props> = (props) => {
-  const { children, addMenu, addHeader, ...restProps } = props;
+  const { children, addMenu, addHeader, secondCurrency, ...restProps } = props;
 
   const { router, balance, isLoading, isSuccess } = useMainWrapper();
   return (
@@ -29,6 +29,22 @@ const MainWrapper: FC<Props> = (props) => {
                   <Typography>
                     {balance ? `${balance} USD` : "0.00 USD"}
                   </Typography>
+                  {secondCurrency && (
+                    <>
+                      <Typography
+                        $fontSize={"12px"}
+                        $color={rgba(Theme.colors.white, 0.6)}
+                      >
+                        |
+                      </Typography>
+                      <Typography
+                        $fontSize={"12px"}
+                        $color={rgba(Theme.colors.white, 0.6)}
+                      >
+                        {secondCurrency}
+                      </Typography>
+                    </>
+                  )}
                 </S.CurrentBalance>
 
                 <Button
