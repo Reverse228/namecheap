@@ -34,7 +34,7 @@ const History = () => {
               <Table className={"w-full"}>
                 <TableHeader>
                   <TableRow className={"*:whitespace-nowrap"}>
-                    <TableHead>ID</TableHead>
+                    {/*<TableHead>ID</TableHead>*/}
                     <TableHead>Пара</TableHead>
                     <TableHead>Сумма</TableHead>
                     <TableHead>Цена</TableHead>
@@ -60,9 +60,9 @@ const History = () => {
                       idx,
                     ) => (
                       <TableRow key={id} className={`*:whitespace-nowrap  `}>
-                        <TableCell className={"text-muted-foreground text-xs"}>
-                          {idx + 1}
-                        </TableCell>
+                        {/*<TableCell className={"text-muted-foreground text-xs"}>*/}
+                        {/*  {idx + 1}*/}
+                        {/*</TableCell>*/}
                         <TableCell>
                           {baseCurrency}/
                           <Label className={"text-xs"}>{quoteCurrency}</Label>
@@ -83,7 +83,7 @@ const History = () => {
                         </TableCell>
                         <TableCell>{status}</TableCell>
                         <TableCell className={"text-muted-foreground text-xs"}>
-                          {dayjs(timestamp).format("YYYY/MM/DD HH:mm")}
+                          {dayjs(timestamp).format("DD/MM/YYYY HH:mm")}
                         </TableCell>
                       </TableRow>
                     ),

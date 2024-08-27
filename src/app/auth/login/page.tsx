@@ -19,12 +19,14 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import { ASSETS } from "@/utils/constants";
 import { useLogInUser } from "@/api";
 import { setToken } from "@/utils/functions/authentication";
-import { LifeBuoy } from "lucide-react";
+import { KeyRound, LifeBuoy } from "lucide-react";
+import Support from "@/components/Support/support";
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type LogInData = {
   email: string;
@@ -95,7 +97,9 @@ const LogIn = () => {
           </Button>
           <Card className="w-full">
             <CardHeader className={"gap-2"}>
-              <CardTitle>Вход</CardTitle>
+              <CardTitle className={"flex gap-2 items-center"}>
+                <KeyRound /> Вход
+              </CardTitle>
               <CardDescription>Вход в существующий аккаунт</CardDescription>
             </CardHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -128,20 +132,28 @@ const LogIn = () => {
           </Card>
         </div>
       </MainWrapper>
-      <HoverCard>
-        <HoverCardTrigger
-          className={
-            "absolute top-full left-full -translate-y-[200%] -translate-x-[200%]"
-          }
-        >
-          <LifeBuoy
-            className={"opacity-40 hover:opacity-100 transition cursor-pointer"}
-          />
-        </HoverCardTrigger>
-        <HoverCardContent className={"text-xs w-fit"}>
-          Служба поддержки
-        </HoverCardContent>
-      </HoverCard>
+
+      <TooltipProvider>
+        <Tooltip>
+          <Support>
+            <TooltipTrigger
+              asChild
+              className={
+                "absolute top-full left-full -translate-y-[200%] -translate-x-[200%]"
+              }
+            >
+              <LifeBuoy
+                className={
+                  "opacity-40 hover:opacity-100 transition cursor-pointer"
+                }
+              />
+            </TooltipTrigger>
+          </Support>
+          <TooltipContent>
+            <p> Служба поддержки</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </>
   );
 };

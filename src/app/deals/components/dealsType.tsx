@@ -116,15 +116,14 @@ const DealsType: FC<Props> = ({ data, cancelButton, userStatus }) => {
                             <AlertDialogTrigger asChild>
                               <Button
                                 variant={"destructive"}
-                                size={"sm"}
-                                className={"gap-2"}
+                                size={"icon"}
+                                className={"gap-2 max-w-8 max-h-8"}
                                 disabled={cancelOrderStatus === "loading"}
                               >
                                 {cancelOrderStatus === "loading" ? (
                                   <LoadingSpinner />
                                 ) : (
                                   <>
-                                    Зактрыть
                                     <CircleX className={"w-4"} />
                                   </>
                                 )}
@@ -223,9 +222,17 @@ const DealsType: FC<Props> = ({ data, cancelButton, userStatus }) => {
           )}
         </>
       ) : (
-        <Label className={"text-muted-foreground text-xl text-center mt-5"}>
-          Список сделок пуст
-        </Label>
+        <>
+          {userStatus === "loading" ? (
+            skeletonArray.map((_, idx) => (
+              <Skeleton key={idx} className={`w-full h-[174px] rounded-lg`} />
+            ))
+          ) : (
+            <Label className={"text-muted-foreground text-xl text-center mt-5"}>
+              Список сделок пуст
+            </Label>
+          )}
+        </>
       )}
     </div>
   );

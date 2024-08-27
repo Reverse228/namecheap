@@ -19,7 +19,19 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Copy, QrCode } from "lucide-react";
+import {
+  CircleArrowOutUpRight,
+  CircleFadingPlus,
+  Copy,
+  DollarSign,
+  LifeBuoy,
+  LogOut,
+  QrCode,
+  User,
+  UserPen,
+  Wallet,
+  WalletCards,
+} from "lucide-react";
 import QRCode from "react-qr-code";
 import { useToast } from "@/components/ui/use-toast";
 import {
@@ -36,6 +48,10 @@ import NoUserLogin from "@/components/NoUserLogin";
 import { useRouter } from "next/navigation";
 import { destroyToken } from "@/utils/functions/authentication";
 import { LOGIN } from "@/utils/constants";
+import Withdrawal from "@/app/profile/components/withdrawal";
+import Support from "@/components/Support/support";
+import React from "react";
+import EditUser from "@/app/profile/components/editUser";
 
 const Page = () => {
   const router = useRouter();
@@ -98,11 +114,13 @@ const Page = () => {
           <div className={"flex flex-col gap-4"}>
             <Card>
               <CardHeader>
-                <CardTitle className={"text-xl"}>Балансы</CardTitle>
+                <CardTitle className={"text-xl flex gap-2 items-center"}>
+                  <WalletCards /> Балансы
+                </CardTitle>
               </CardHeader>
               <CardContent className={"flex flex-col gap-3"}>
                 <div className={"flex items-center justify-between"}>
-                  <Label className={"text-muted-foreground text-base"}>
+                  <Label className={" text-base flex items-center"}>
                     Главный счет (USD)
                   </Label>
                   <Label className={"text-base"}>
@@ -140,7 +158,7 @@ const Page = () => {
                                   </Label>
                                   <Label
                                     className={cn(
-                                      "text-base",
+                                      "",
                                       !balance
                                         ? "text-muted-foreground"
                                         : balance > 0
@@ -186,7 +204,9 @@ const Page = () => {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className={"text-xl"}>Кошелек</CardTitle>
+                <CardTitle className={"text-xl flex gap-2 items-center"}>
+                  <Wallet /> Кошелек
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div
@@ -200,7 +220,7 @@ const Page = () => {
                   <div className={"flex gap-2 items-center"}>
                     <Label
                       className={
-                        "overflow-hidden text-ellipsis whitespace-nowrap max-[660px]:w-[200px]"
+                        "overflow-hidden text-ellipsis whitespace-nowrap max-[660px]:yarn w-[200px]"
                       }
                     >
                       {userData?.depositWallet}
@@ -244,21 +264,29 @@ const Page = () => {
             </Card>
             <div className={"w-full flex gap-4"}>
               <FillWallet wallet={userData?.depositWallet ?? ""}>
-                <Button className={"w-full"}>Пополнить баланс</Button>
+                <Button className={"w-full gap-2"}>
+                  <CircleFadingPlus size={16} /> Пополнить баланс
+                </Button>
               </FillWallet>
-              <Button variant={"secondary"} className={"w-full"}>
-                Вывести средства
-              </Button>
+              <Withdrawal>
+                <Button variant={"secondary"} className={"w-full gap-2"}>
+                  <CircleArrowOutUpRight size={16} /> Вывести средства
+                </Button>
+              </Withdrawal>
             </div>
             <Card>
               <CardHeader
                 className={"flex-row justify-between space-y-0 items-center "}
               >
-                <CardTitle className={"text-xl"}>Данные пользователя</CardTitle>
+                <CardTitle className={"text-xl flex gap-2 items-center"}>
+                  <User /> Данные пользователя
+                </CardTitle>
                 <CardDescription>
-                  <Button variant={"ghost"} size={"sm"}>
-                    Редактировать
-                  </Button>
+                  <EditUser>
+                    <Button variant={"ghost"} size={"sm"} className={"gap-2"}>
+                      <UserPen size={18} /> Редактировать
+                    </Button>
+                  </EditUser>
                 </CardDescription>
               </CardHeader>
               <CardContent className={"flex flex-col gap-3"}>
@@ -283,15 +311,17 @@ const Page = () => {
               </CardContent>
             </Card>
             <div className={"w-full flex flex-col gap-4"}>
-              <Button variant={"secondary"} className={"w-full"}>
-                Запросить поддержку
-              </Button>
+              <Support>
+                <Button variant={"secondary"} className={"w-full gap-2"}>
+                  <LifeBuoy size={16} /> Запросить поддержку
+                </Button>
+              </Support>
               <Button
                 variant={"outline"}
-                className={"w-full"}
+                className={"w-full gap-2"}
                 onClick={handleExist}
               >
-                Выйти из системы
+                <LogOut size={16} /> Выйти из системы
               </Button>
             </div>
           </div>

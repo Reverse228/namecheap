@@ -30,12 +30,14 @@ import { useEffect } from "react";
 import { ASSETS } from "@/utils/constants";
 import { setToken } from "@/utils/functions/authentication";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { BadgePlus, LifeBuoy } from "lucide-react";
+import Support from "@/components/Support/support";
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { LifeBuoy } from "lucide-react";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type LogInData = {
   name: string;
@@ -146,7 +148,9 @@ const Registration = () => {
           </Button>
           <Card className="w-full">
             <CardHeader className={"gap-2"}>
-              <CardTitle>Регистрация</CardTitle>
+              <CardTitle className={"flex gap-2 items-center"}>
+                <BadgePlus /> Регистрация
+              </CardTitle>
               <CardDescription>Создание нового аккаунта</CardDescription>
             </CardHeader>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -257,20 +261,28 @@ const Registration = () => {
           </Card>
         </div>
       </MainWrapper>
-      <HoverCard>
-        <HoverCardTrigger
-          className={
-            "absolute top-auto left-full -translate-y-[200%] -translate-x-[200%]"
-          }
-        >
-          <LifeBuoy
-            className={"opacity-40 hover:opacity-100 transition cursor-pointer"}
-          />
-        </HoverCardTrigger>
-        <HoverCardContent className={"text-xs w-fit"}>
-          Служба поддержки
-        </HoverCardContent>
-      </HoverCard>
+
+      <TooltipProvider>
+        <Tooltip>
+          <Support>
+            <TooltipTrigger
+              asChild
+              className={
+                "absolute top-auto left-full -translate-y-[200%] -translate-x-[200%]"
+              }
+            >
+              <LifeBuoy
+                className={
+                  "opacity-40 hover:opacity-100 transition cursor-pointer"
+                }
+              />
+            </TooltipTrigger>
+          </Support>
+          <TooltipContent>
+            <p> Служба поддержки</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </>
   );
 };

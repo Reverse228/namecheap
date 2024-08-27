@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Blend, DollarSign } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { TRADE } from "@/utils/constants";
@@ -96,13 +96,16 @@ const Assets = () => {
                   ({ quoteCurrency, baseCurrency, lastPrice, type }) => (
                     <Card key={`${baseCurrency}-${quoteCurrency}`}>
                       <CardHeader className={"flex-row justify-between"}>
-                        <CardTitle className={"text-xl"}>
-                          {`${baseCurrency} / ${quoteCurrency}`}
+                        <CardTitle
+                          className={"text-xl flex items-center gap-2"}
+                        >
+                          <Blend /> {`${baseCurrency} / ${quoteCurrency}`}
                         </CardTitle>
                         <CardDescription className={"flex gap-1"}>
                           <Label>Цена:</Label>
-                          <Label className={"text-card-foreground"}>
-                            {Number(lastPrice).toFixed(3)} USD
+                          <Label className={"text-card-foreground flex"}>
+                            {Number(lastPrice).toFixed(3)}
+                            <DollarSign size={16} className={"-mt-[1.5px] "} />
                           </Label>
                         </CardDescription>
                       </CardHeader>

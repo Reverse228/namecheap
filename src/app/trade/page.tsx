@@ -8,6 +8,7 @@ import { urlQuery } from "@/utils/functions/urlQuery";
 import ActionForm from "@/app/trade/components/actionForm";
 import NoUserLogin from "@/components/NoUserLogin";
 import LimitForm from "@/app/trade/components/limitForm";
+import Chart from "@/app/trade/components/chart";
 
 const Trade = () => {
   const searchParams = useSearchParams();
@@ -52,7 +53,7 @@ const Trade = () => {
         userStatus={userStatus}
       />
       <LimitForm />
-      {/*<Chart />*/}
+      <Chart />
     </MainWrapper>
   );
 };

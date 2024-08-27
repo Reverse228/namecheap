@@ -9,6 +9,7 @@ import DealsType from "@/app/deals/components/dealsType";
 import { useGetMe } from "@/api";
 import { Command, CommandInput, CommandList } from "@/components/ui/command";
 import NoUserLogin from "@/components/NoUserLogin";
+import { Package, PackageOpen } from "lucide-react";
 
 type DataType = {
   id: string | null;
@@ -109,15 +110,17 @@ const Deals = () => {
               value={"open"}
               onClick={() => handleType("open")}
               disabled={userStatus !== "success"}
+              className={"gap-2"}
             >
-              Открытые сделки
+              <PackageOpen size={16} /> Открытые сделки
             </TabsTrigger>
             <TabsTrigger
               value={"close"}
               onClick={() => handleType("close")}
               disabled={userStatus !== "success"}
+              className={"gap-2"}
             >
-              Зактрыктые сделки
+              <Package size={16} /> Зактрыктые сделки
             </TabsTrigger>
           </TabsList>
           <TabsContent value="open">

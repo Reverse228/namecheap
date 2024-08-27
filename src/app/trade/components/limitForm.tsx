@@ -7,7 +7,12 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { ArrowDownRight, ArrowUpRight, Settings2 } from "lucide-react";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  DollarSign,
+  Settings2,
+} from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useGetMe, useGetPairs, usePostOrder } from "@/api";
 import InputLabel from "@/components/Input";
@@ -96,8 +101,9 @@ const LimitForm = () => {
         <CardTitle className={"text-xl"}>{pairsName}</CardTitle>
         <CardDescription className={"flex gap-1"}>
           <Label>Цена:</Label>
-          <Label className={"text-card-foreground"}>
-            {Number(lastPriceOfCoin).toFixed(3)} USD
+          <Label className={"text-card-foreground flex"}>
+            {Number(lastPriceOfCoin).toFixed(3)}{" "}
+            <DollarSign size={16} className={"-mt-[1.5px] "} />
           </Label>
         </CardDescription>
       </CardHeader>

@@ -7,6 +7,7 @@ import { FC } from "react";
 import { useSearchParams } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import FillWallet from "@/components/FillWallet";
+import { CircleFadingPlus, DollarSign } from "lucide-react";
 
 type Props = {
   secondBalance?: boolean;
@@ -18,8 +19,8 @@ const Header: FC<Props> = ({ secondBalance }) => {
   const { data: userData, status } = useGetMe();
 
   const balance = userData?.assetBalances
-    ? `${userData.assetBalances.find(({ currency }) => currency === "USD")?.balance} USD`
-    : "0.00 USD";
+    ? `${userData.assetBalances.find(({ currency }) => currency === "USD")?.balance}`
+    : "0.00";
 
   const secondCurrency =
     searchParams.get("pair") && searchParams.get("pair")?.split("-")[0];
@@ -47,7 +48,9 @@ const Header: FC<Props> = ({ secondBalance }) => {
               <div className={"flex justify-between w-full flex-wrap gap-4"}>
                 <div className={"flex gap-2 items-center flex-wrap"}>
                   <Label className={"text-muted-foreground"}>Доступно:</Label>
-                  <Label className={"text-base"}>{balance}</Label>
+                  <Label className={"text-base flex items-center"}>
+                    {balance} <DollarSign size={18} className={"-mt-[1.5px]"} />
+                  </Label>
                   {secondBalance && (
                     <>
                       <Separator orientation="vertical" className={"max-h-4"} />
@@ -58,7 +61,9 @@ const Header: FC<Props> = ({ secondBalance }) => {
                   )}
                 </div>
                 <FillWallet wallet={userData?.depositWallet ?? ""}>
-                  <Button>Пополнить баланс</Button>
+                  <Button className={"gap-2"}>
+                    <CircleFadingPlus size={16} /> Пополнить баланс
+                  </Button>
                 </FillWallet>
               </div>
             ) : (
