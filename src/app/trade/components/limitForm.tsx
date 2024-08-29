@@ -16,7 +16,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import { useGetMe, useGetPairs, usePostOrder } from "@/api";
 import InputLabel from "@/components/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,15 +35,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useToast } from "@/components/ui/use-toast";
 
 const LimitForm = () => {
   const searchParams = useSearchParams();
+
+  const { toast } = useToast();
 
   const { data: pairs } = useGetPairs();
   const { status: userStatus, data: useData } = useGetMe();
   const { executeMutation: sendOrder, status: orderStatus } = usePostOrder();
 
   const [sum, setSum] = useState<number | undefined>(undefined);
+  const [limit, setLimit] = useState<number | undefined>(undefined);
 
   const baseCoin = searchParams.get("pair")?.split("-")[0];
   const secondCoin = searchParams.get("pair")?.split("-")[1];
@@ -55,7 +59,7 @@ const LimitForm = () => {
       quoteCurrency === secondCoin && baseCurrency === baseCoin,
   );
 
-  const lastPriceOfCoin = currentPairData?.lastPrice;
+  const filterLastPrice = limit ?? currentPairData?.lastPrice;
 
   const getBalances = (type: "baseCurrency" | "quoteCurrency") =>
     useData?.assetBalances.find(
@@ -66,24 +70,26 @@ const LimitForm = () => {
     const mainBalance = getBalances("quoteCurrency");
     const secondBalance = getBalances("baseCurrency");
 
-    if (sum && lastPriceOfCoin) {
+    if (sum && filterLastPrice) {
       if (type === "SELL") {
         return sum > secondBalance;
       } else if (type === "BUY") {
-        return sum * lastPriceOfCoin > mainBalance;
+        return sum * filterLastPrice > mainBalance;
       }
       return true;
     }
     return true;
   };
 
-  const onSubmit = (typeOfDeal: "BUY" | "SELL") => {
-    if (typeOfDeal && lastPriceOfCoin && sum && pairsName) {
+  const onSubmit = (
+    typeOfDeal: "BUY" | "SELL" | "BUY_LIMIT" | "SELL_LIMIT",
+  ) => {
+    if (typeOfDeal && filterLastPrice && sum && pairsName) {
       sendOrder({
         pair: `${baseCoin}-${secondCoin}`,
         amount: sum,
         orderType: typeOfDeal,
-        price: lastPriceOfCoin,
+        price: filterLastPrice,
         margin: 1,
         orderCategory: "SPOT",
       });
@@ -95,6 +101,24 @@ const LimitForm = () => {
     setSum(numericValue);
   };
 
+  const handleLimit = (value: string) => {
+    const numericValue = Number(value);
+    setLimit(numericValue);
+  };
+
+  useEffect(() => {
+    if (orderStatus === "success") {
+      toast({
+        description: "Ордер успешно создан!",
+      });
+    } else if (orderStatus === "error") {
+      toast({
+        variant: "destructive",
+        description: "Произошла ошибка! Ордер не создан",
+      });
+    }
+  }, [orderStatus]);
+
   return (
     <Card>
       <CardHeader className={"flex-row justify-between"}>
@@ -102,7 +126,11 @@ const LimitForm = () => {
         <CardDescription className={"flex gap-1"}>
           <Label>Цена:</Label>
           <Label className={"text-card-foreground flex"}>
-            {Number(lastPriceOfCoin).toFixed(3)}{" "}
+            {currentPairData?.lastPrice ? (
+              Number(currentPairData?.lastPrice).toFixed(3)
+            ) : (
+              <LoadingSpinner className={"w-4 -mt-[5px]"} />
+            )}{" "}
             <DollarSign size={16} className={"-mt-[1.5px] "} />
           </Label>
         </CardDescription>
@@ -126,10 +154,12 @@ const LimitForm = () => {
             </AccordionTrigger>
             <AccordionContent className={"flex  px-1  gap-2"}>
               <InputLabel
-                label={"Take profit"}
-                inputProps={{ type: "number" }}
+                label={"Лимит"}
+                inputProps={{
+                  type: "number",
+                  onChange: (event) => handleLimit(event.target.value),
+                }}
               />
-              <InputLabel label={"Stop loss"} inputProps={{ type: "number" }} />
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -153,7 +183,7 @@ const LimitForm = () => {
                     <ArrowDownRight />
                     Продать{" "}
                     {sum
-                      ? `за ${(sum * (lastPriceOfCoin ?? 0)).toFixed(3)} ${secondCoin}`
+                      ? `за ${(sum * (filterLastPrice ?? 0)).toFixed(3)} ${secondCoin}`
                       : ""}
                   </>
                 )}
@@ -178,12 +208,14 @@ const LimitForm = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Подвержение продажи</AlertDialogTitle>
                   <AlertDialogDescription>
-                    {`Вы намерены продать ${sum} ${baseCoin} за ${((sum ?? 0) * (lastPriceOfCoin ?? 0)).toFixed(3)} USD`}
+                    {`Вы намерены продать ${sum} ${baseCoin} за ${((sum ?? 0) * (filterLastPrice ?? 0)).toFixed(3)} USD`}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Отменить</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => onSubmit("SELL")}>
+                  <AlertDialogAction
+                    onClick={() => onSubmit(limit ? "SELL_LIMIT" : "SELL")}
+                  >
                     Продать
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -209,7 +241,7 @@ const LimitForm = () => {
                     <ArrowUpRight />
                     Купить{" "}
                     {sum
-                      ? `за ${(sum * (lastPriceOfCoin ?? 0)).toFixed(3)} ${secondCoin}`
+                      ? `за ${(sum * (filterLastPrice ?? 0)).toFixed(3)} ${secondCoin}`
                       : ""}
                   </>
                 )}
@@ -234,12 +266,14 @@ const LimitForm = () => {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Подвержение покупки</AlertDialogTitle>
                   <AlertDialogDescription>
-                    {`Вы намерены купить ${sum} ${baseCoin} за ${((sum ?? 0) * (lastPriceOfCoin ?? 0)).toFixed(3)} ${secondCoin}`}
+                    {`Вы намерены купить ${sum} ${baseCoin} за ${((sum ?? 0) * (filterLastPrice ?? 0)).toFixed(3)} ${secondCoin}`}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Отменить</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => onSubmit("BUY")}>
+                  <AlertDialogAction
+                    onClick={() => onSubmit(limit ? "BUY_LIMIT" : "BUY")}
+                  >
                     Купить
                   </AlertDialogAction>
                 </AlertDialogFooter>

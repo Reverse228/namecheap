@@ -8,11 +8,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import { CircleSlash, RefreshCcw } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import InputLabel from "@/components/Input";
-import { useGetCountry, useGetMe } from "@/api";
+import { useGetCountry, useGetMe, usePatchUser } from "@/api";
 import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import {
@@ -27,6 +27,8 @@ import {
   CompareObjects,
   IsObjectsEquals,
 } from "@/utils/functions/compareObjects";
+import { useToast } from "@/components/ui/use-toast";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 type Props = {
   children: ReactNode;
@@ -42,7 +44,11 @@ type EditUser = {
 
 const EditUser: FC<Props> = ({ children }) => {
   const { data: userData, status: userStatus } = useGetMe();
+  const { executeMutation: patchUser, status: patchUserStatus } =
+    usePatchUser();
   const { data: country } = useGetCountry();
+
+  const { toast } = useToast();
 
   const defaultValues = {
     name: userData?.name?.split(" ")[0],
@@ -58,8 +64,36 @@ const EditUser: FC<Props> = ({ children }) => {
     });
 
   const onSubmit: SubmitHandler<EditUser> = (data) => {
-    console.log(data);
+    if (userData) {
+      const sendData = {
+        ...data,
+        id: userData.id,
+        accountStatus: userData.accountStatus,
+        role: userData.role,
+        assetBalances: userData.assetBalances,
+        depositWallet: userData.depositWallet,
+      };
+
+      patchUser(sendData);
+    }
   };
+
+  useEffect(() => {
+    if (patchUserStatus === "success") {
+      toast({
+        description: "Данные были обновленны успешно!",
+      });
+    } else if (patchUserStatus === "loading") {
+      toast({
+        description: <LoadingSpinner />,
+      });
+    } else if (patchUserStatus === "error") {
+      toast({
+        variant: "destructive",
+        description: "Произошла ошибка!",
+      });
+    }
+  }, [patchUserStatus]);
 
   return (
     <AlertDialog>

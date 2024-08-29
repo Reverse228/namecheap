@@ -6,3 +6,6 @@ export { useGetPairs } from "./GetPairs";
 export { usePostOrder } from "./PostOrder";
 export { usePostCancelOrder } from "./PostCancelOrder";
 export { useGetHistory } from "./GetHistory";
+export { useGetWalletHistory } from "./GetWalletHistory";
+export { usePatchUser } from "./PatchUser";
+export { usePostSupport } from "./PostSupport";

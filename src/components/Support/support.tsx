@@ -8,15 +8,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import InputLabel from "@/components/Input";
-import { useGetMe } from "@/api";
+import { useGetMe, usePostSupport } from "@/api";
 import DateTimePicker from "@/components/TimePicker/date-time-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { IsSubmittedObject } from "@/utils/functions/compareObjects";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LifeBuoy, SendHorizontal } from "lucide-react";
+import dayjs from "dayjs";
+import { useToast } from "@/components/ui/use-toast";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 type Props = {
   children: ReactNode;
@@ -26,12 +29,16 @@ type FormProps = {
   name: string;
   email: string;
   number: string;
-  time: Date;
+  time: string;
   description: string;
 };
 
 const Support: FC<Props> = ({ children }) => {
   const { data: userData, status: userStatus } = useGetMe();
+  const { executeMutation: postSupport, status: supportStatus } =
+    usePostSupport();
+
+  const { toast } = useToast();
 
   const defaultValues = {
     name: userData?.name ?? "",
@@ -47,9 +54,31 @@ const Support: FC<Props> = ({ children }) => {
     },
   );
   const onSubmit: SubmitHandler<FormProps> = (data) => {
-    console.log(data);
+    const sendData = {
+      ...data,
+      topic: "Support",
+    };
+
+    postSupport(sendData);
     reset();
   };
+
+  useEffect(() => {
+    if (supportStatus === "success") {
+      toast({
+        description: "Сообщение в поддержку отправленно успешно!",
+      });
+    } else if (supportStatus === "loading") {
+      toast({
+        description: <LoadingSpinner />,
+      });
+    } else if (supportStatus === "error") {
+      toast({
+        variant: "destructive",
+        description: "Произошла ошибка!",
+      });
+    }
+  }, [supportStatus]);
 
   return (
     <AlertDialog>
@@ -96,7 +125,11 @@ const Support: FC<Props> = ({ children }) => {
                     label={"Номер"}
                     inputProps={{ type: "tel", ...register("number") }}
                   />
-                  <DateTimePicker getDate={(date) => setValue("time", date)} />
+                  <DateTimePicker
+                    getDate={(date) =>
+                      setValue("time", dayjs(date).toDate().toString())
+                    }
+                  />
                   <Textarea
                     placeholder="Тема обсуждения..."
                     {...register("description")}

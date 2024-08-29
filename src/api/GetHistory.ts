@@ -32,7 +32,9 @@ export type GetPositions = {
 };
 
 export const useGetHistory = () => {
-  const { data, status } = useApiCalls<any, GetPositions[]>("positions");
+  const { data, status } = useApiCalls<any, GetPositions[]>("positions", {
+    refetchOnMount: true,
+  });
 
   return { data, status };
 };

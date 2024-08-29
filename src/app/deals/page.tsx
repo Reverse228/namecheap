@@ -10,6 +10,7 @@ import { useGetMe } from "@/api";
 import { Command, CommandInput, CommandList } from "@/components/ui/command";
 import NoUserLogin from "@/components/NoUserLogin";
 import { Package, PackageOpen } from "lucide-react";
+import { useGetCountry } from "@/api/GetOrders";
 
 type DataType = {
   id: string | null;
@@ -40,7 +41,8 @@ const Deals = () => {
     Array.from(searchParams.entries()),
   );
 
-  const { data: userData, status: userStatus } = useGetMe();
+  const { status: userStatus } = useGetMe();
+  const { data: ordersData, status: orderStatus } = useGetCountry();
 
   const [filteredData, setFilteredData] = useState<DataType[] | undefined>(
     undefined,
@@ -48,11 +50,11 @@ const Deals = () => {
 
   const openOrders =
     filteredData?.filter(({ orderStatus }) => orderStatus === "OPEN") ??
-    userData?.orders.filter(({ orderStatus }) => orderStatus === "OPEN");
+    ordersData?.filter(({ orderStatus }) => orderStatus === "OPEN");
 
   const closeOrders =
     filteredData?.filter(({ orderStatus }) => orderStatus === "COMPLETED") ??
-    userData?.orders.filter(({ orderStatus }) => orderStatus === "COMPLETED");
+    ordersData?.filter(({ orderStatus }) => orderStatus === "COMPLETED");
 
   const handleType = (value: "open" | "close") => {
     currentSearchParams.set("type", value);
@@ -69,7 +71,7 @@ const Deals = () => {
   const handleSearch = (value: string) => {
     const lowerValue = value.toLowerCase();
 
-    const newData = userData?.orders.filter(
+    const newData = ordersData?.filter(
       ({
         activePair: { baseCurrency, quoteCurrency },
         amount,
@@ -109,7 +111,7 @@ const Deals = () => {
             <TabsTrigger
               value={"open"}
               onClick={() => handleType("open")}
-              disabled={userStatus !== "success"}
+              disabled={orderStatus !== "success"}
               className={"gap-2"}
             >
               <PackageOpen size={16} /> Открытые сделки
@@ -117,17 +119,21 @@ const Deals = () => {
             <TabsTrigger
               value={"close"}
               onClick={() => handleType("close")}
-              disabled={userStatus !== "success"}
+              disabled={orderStatus !== "success"}
               className={"gap-2"}
             >
               <Package size={16} /> Зактрыктые сделки
             </TabsTrigger>
           </TabsList>
           <TabsContent value="open">
-            <DealsType data={openOrders} cancelButton userStatus={userStatus} />
+            <DealsType
+              data={openOrders}
+              cancelButton
+              userStatus={orderStatus}
+            />
           </TabsContent>
           <TabsContent value={"close"}>
-            <DealsType data={closeOrders} userStatus={userStatus} />
+            <DealsType data={closeOrders} userStatus={orderStatus} />
           </TabsContent>
         </Tabs>
       </div>

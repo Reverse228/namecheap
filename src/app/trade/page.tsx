@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { useGetMe, useGetPairs } from "@/api";
 import { useEffect } from "react";
 import { urlQuery } from "@/utils/functions/urlQuery";
-import ActionForm from "@/app/trade/components/actionForm";
 import NoUserLogin from "@/components/NoUserLogin";
 import LimitForm from "@/app/trade/components/limitForm";
 import Chart from "@/app/trade/components/chart";

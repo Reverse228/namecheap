@@ -4,3 +4,5 @@ export const ASSETS = "/assets";
 export const LOGIN = "/auth/login";
 export const REGISTER = "/auth/register";
 export const TRADE = "/trade";
+
+export const ADMIN_DASHBOARD = "admin/dashboard";
