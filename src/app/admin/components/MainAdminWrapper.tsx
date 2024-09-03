@@ -1,24 +1,38 @@
 import { useGetMe } from "@/api";
-import { ASSETS } from "@/utils/constants";
+import { ASSETS, LOGIN } from "@/utils/constants";
 import { useRouter } from "next/navigation";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ShieldBan } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { cn } from "@/lib/utils";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type Props = {
   children: ReactNode;
+  className?: string;
+  tabValue?: "pairs" | "users";
 };
 
-const MainAdminWrapper: FC<Props> = ({ children }) => {
+const MainAdminWrapper: FC<Props> = ({ children, className, tabValue }) => {
   const router = useRouter();
 
   const { data: userData, status: userStatus } = useGetMe();
 
+  const handleRoute = (path: string) => {
+    router.replace(path);
+  };
+
   const handleGoBack = () => {
     router.push(ASSETS);
   };
+
+  useEffect(() => {
+    if (userStatus === "error") {
+      router.push(LOGIN);
+    }
+  }, [userStatus]);
 
   return userStatus === "loading" ? (
     <div
@@ -54,7 +68,19 @@ const MainAdminWrapper: FC<Props> = ({ children }) => {
           </div>
         </div>
       ) : (
-        <>{children}</>
+        <>
+          {userStatus === "success" && userData?.role === "ADMIN" && (
+            <div className={cn("p-4 flex flex-col gap-4", className)}>
+              <Tabs onValueChange={handleRoute} value={tabValue}>
+                <TabsList>
+                  <TabsTrigger value="pairs">Активы</TabsTrigger>
+                  <TabsTrigger value="users">Пользователи</TabsTrigger>
+                </TabsList>
+              </Tabs>
+              {children}
+            </div>
+          )}
+        </>
       )}
     </>
   );

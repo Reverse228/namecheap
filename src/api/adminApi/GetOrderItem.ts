@@ -1,6 +1,6 @@
 import { useApiCalls } from "@/utils/hooks/useApiCalls";
 
-export type OrdersApi = {
+export type GetOrderItemApi = {
   id: string | null;
   activePair: {
     baseCurrency: string | null;
@@ -23,13 +23,12 @@ export type OrdersApi = {
   timestamp: string | null;
 };
 
-export const useGetOrders = () => {
+export const useGetOrderItem = (id: string) => {
   const { data, isSuccess, isLoading, status } = useApiCalls<
-    OrdersApi[],
-    OrdersApi[]
-  >("orders", {
+    GetOrderItemApi,
+    GetOrderItemApi
+  >(`orders/${id}`, {
     refetchOnMount: true,
-    retryOnMount: true,
   });
 
   return { data, isSuccess, isLoading, status };

@@ -13,7 +13,6 @@ import { CircleSlash, RefreshCcw } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import InputLabel from "@/components/Input";
 import { useGetCountry, useGetMe, usePatchUser } from "@/api";
-import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -23,10 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  CompareObjects,
-  IsObjectsEquals,
-} from "@/utils/functions/compareObjects";
+import { IsObjectsEquals } from "@/utils/functions/compareObjects";
 import { useToast } from "@/components/ui/use-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
@@ -66,12 +62,10 @@ const EditUser: FC<Props> = ({ children }) => {
   const onSubmit: SubmitHandler<EditUser> = (data) => {
     if (userData) {
       const sendData = {
-        ...data,
-        id: userData.id,
-        accountStatus: userData.accountStatus,
-        role: userData.role,
-        assetBalances: userData.assetBalances,
-        depositWallet: userData.depositWallet,
+        name: `${data.name} ${data.surname}` ?? "",
+        country: data.country ?? "",
+        email: data.email ?? "",
+        phone: data.phone ?? "",
       };
 
       patchUser(sendData);

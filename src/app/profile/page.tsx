@@ -215,6 +215,7 @@ const Page = () => {
                 )}
               </CardContent>
             </Card>
+
             {/*<Card>*/}
             {/*  <CardHeader>*/}
             {/*    <CardTitle className={"text-xl flex gap-2 items-center"}>*/}
@@ -233,7 +234,7 @@ const Page = () => {
             {/*      <div className={"flex gap-2 items-center"}>*/}
             {/*        <Label*/}
             {/*          className={*/}
-            {/*            "overflow-hidden text-ellipsis whitespace-nowrap max-[660px]:yarn w-[200px]"*/}
+            {/*            "overflow-hidden text-ellipsis whitespace-nowrap max-w-[660px] w-[200px]"*/}
             {/*          }*/}
             {/*        >*/}
             {/*          {userData?.depositWallet}*/}
@@ -275,6 +276,7 @@ const Page = () => {
             {/*    </div>*/}
             {/*  </CardContent>*/}
             {/*</Card>*/}
+
             <div className={"w-full flex gap-4"}>
               <FillWallet wallet={userData?.depositWallet ?? ""}>
                 <Button className={"w-full gap-2"}>
@@ -324,7 +326,7 @@ const Page = () => {
               </CardContent>
             </Card>
             <div className={"w-full flex flex-col gap-4"}>
-              <div className={"w-full flex gap-4"}>
+              <div className={"w-full flex gap-4 "}>
                 <Support>
                   <Button variant={"secondary"} className={"w-full gap-2"}>
                     <LifeBuoy size={16} /> Запросить поддержку

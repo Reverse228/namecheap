@@ -41,7 +41,7 @@ const DateTimePicker: FC<Props> = ({ getDate }) => {
   }, [date]);
 
   return (
-    <Popover>
+    <Popover modal={true}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}

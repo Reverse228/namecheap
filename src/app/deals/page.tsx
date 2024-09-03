@@ -10,7 +10,7 @@ import { useGetMe } from "@/api";
 import { Command, CommandInput, CommandList } from "@/components/ui/command";
 import NoUserLogin from "@/components/NoUserLogin";
 import { Package, PackageOpen } from "lucide-react";
-import { useGetCountry } from "@/api/GetOrders";
+import { useGetOrders } from "@/api/GetOrders";
 
 type DataType = {
   id: string | null;
@@ -42,7 +42,7 @@ const Deals = () => {
   );
 
   const { status: userStatus } = useGetMe();
-  const { data: ordersData, status: orderStatus } = useGetCountry();
+  const { data: ordersData, status: orderStatus } = useGetOrders();
 
   const [filteredData, setFilteredData] = useState<DataType[] | undefined>(
     undefined,

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { API_URL } from "@/utils/constants";
 
 export const axiosMutation = async <ReturnedData, DataType = unknown>(
-  mutationType: "post" | "patch" | "delete",
+  mutationType: "post" | "put" | "delete",
   path: string,
   data?: DataType,
   isContentType?: boolean,

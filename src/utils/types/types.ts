@@ -5,3 +5,6 @@ export type MenuVariant =
   | "/profile"
   | "/history"
   | false;
+
+export type AdminPairsActions = "edit" | "delete" | "create" | null;
+export type AdminUsersActions = "edit" | "orders" | null;
