@@ -28,7 +28,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AdminPairsActions } from "@/utils/types";
-import EditDialog from "@/app/admin/dashboard/pairs/components/edit";
 import CreateDialog from "@/app/admin/dashboard/pairs/components/create";
 import DeleteAlert from "@/app/admin/dashboard/pairs/components/delete";
 
@@ -100,18 +99,6 @@ const Pairs = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
                           <DropdownMenuItem
-                            onClick={() =>
-                              handleOpenAction("edit", {
-                                quoteCurrency,
-                                baseCurrency,
-                                type,
-                                lastPrice,
-                              })
-                            }
-                          >
-                            Редактировать
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
                             className={"text-red-500"}
                             onClick={() =>
                               handleOpenAction("delete", {
@@ -137,11 +124,6 @@ const Pairs = () => {
 
       {dataSelected && (
         <>
-          <EditDialog
-            data={dataSelected}
-            open={openDialog}
-            close={handleCloseAction}
-          />
           <DeleteAlert
             data={dataSelected}
             open={openDialog}

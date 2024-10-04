@@ -23,14 +23,22 @@ export type OrdersApi = {
   timestamp: string | null;
 };
 
-export const useGetOrders = () => {
+export const useGetOrders = (id: string | undefined) => {
   const { data, isSuccess, isLoading, status } = useApiCalls<
     OrdersApi[],
     OrdersApi[]
-  >("orders", {
-    refetchOnMount: true,
-    retryOnMount: true,
-  });
+  >(
+    "orders",
+    {
+      enabled: Boolean(id),
+      retry: Boolean(id),
+      refetchOnMount: true,
+      retryOnMount: true,
+    },
+    {
+      userId: id,
+    },
+  );
 
   return { data, isSuccess, isLoading, status };
 };

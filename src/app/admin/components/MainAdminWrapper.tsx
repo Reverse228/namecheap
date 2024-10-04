@@ -12,7 +12,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 type Props = {
   children: ReactNode;
   className?: string;
-  tabValue?: "pairs" | "users";
+  tabValue?: "pairs" | "users" | "calls";
 };
 
 const MainAdminWrapper: FC<Props> = ({ children, className, tabValue }) => {
@@ -75,6 +75,7 @@ const MainAdminWrapper: FC<Props> = ({ children, className, tabValue }) => {
                 <TabsList>
                   <TabsTrigger value="pairs">Активы</TabsTrigger>
                   <TabsTrigger value="users">Пользователи</TabsTrigger>
+                  <TabsTrigger value="calls">Звонки</TabsTrigger>
                 </TabsList>
               </Tabs>
               {children}

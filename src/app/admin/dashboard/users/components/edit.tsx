@@ -22,7 +22,11 @@ import {
 } from "@/components/ui/select";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useGetCountry } from "@/api";
-import { PatchUserByAdmin, usePatchUserByAdmin } from "@/api/adminApi";
+import {
+  PatchUserByAdmin,
+  usePatchUserByAdmin,
+  usePostAddBalance,
+} from "@/api/adminApi";
 import { useToast } from "@/components/ui/use-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { IsObjectsEquals } from "@/utils/functions/compareObjects";
@@ -41,7 +45,6 @@ type Form = {
   accountStatus: string;
   country: string;
   phone: string;
-  balance: string;
   depositWallet: string;
 };
 
@@ -76,10 +79,6 @@ const EditDialog: FC<Props> = ({
     accountStatus: accountStatus,
     country: country ?? "",
     phone: phone ?? "",
-    balance:
-      assetBalances
-        .find(({ currency }) => currency === "USD")
-        ?.balance?.toString() ?? "0",
     depositWallet: depositWallet ?? "",
   };
 
@@ -88,20 +87,11 @@ const EditDialog: FC<Props> = ({
   });
 
   const onSubmit: SubmitHandler<Form> = (formData) => {
-    const targetObject = assetBalances;
-    const targetBalance = targetObject.find(
-      ({ currency }) => currency === "USD",
-    );
-
-    if (targetBalance) {
-      targetBalance.balance = Number(formData.balance);
-    }
-
     const sendData: PatchUserByAdmin = {
       id: id ?? "",
       name: `${formData.name} ${formData.surname}`,
       email: formData.email,
-      assetBalances: targetObject,
+      assetBalances: assetBalances,
       accountStatus: formData.accountStatus,
       phone: formData.phone,
       country: formData.country,
@@ -207,12 +197,12 @@ const EditDialog: FC<Props> = ({
                 </Label>
                 <Select
                   name={"country"}
-                  defaultValue={watch("accountStatus") ?? ""}
+                  defaultValue={watch("country") ?? ""}
                   onValueChange={(value) => setValue("country", value)}
                 >
                   <SelectTrigger>
                     <SelectValue
-                      defaultValue={watch("accountStatus") ?? ""}
+                      defaultValue={watch("country") ?? ""}
                       id={"country"}
                     />
                   </SelectTrigger>
@@ -241,13 +231,6 @@ const EditDialog: FC<Props> = ({
                 }}
               />
             </div>
-            <InputLabel
-              label={"Баланс"}
-              inputProps={{
-                type: "number",
-                ...register("balance"),
-              }}
-            />
             <InputLabel
               label={"Кошелек"}
               inputProps={{

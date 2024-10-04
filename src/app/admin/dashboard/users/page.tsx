@@ -37,6 +37,7 @@ import { AdminUsersActions } from "@/utils/types";
 import { MeUserApi } from "@/api/GetMe";
 import EditDialog from "@/app/admin/dashboard/users/components/edit";
 import SeeOrdersDrawer from "@/app/admin/dashboard/users/components/seeOrders";
+import BalancesDrawer from "@/app/admin/dashboard/users/components/balances";
 
 const Users = () => {
   const { data: usersData } = useGetAllUsers();
@@ -55,8 +56,6 @@ const Users = () => {
     setOpenPopUp(null);
     setDataSelected(undefined);
   };
-
-  console.log(openPopUp);
 
   return (
     <MainAdminWrapper tabValue={"users"}>
@@ -162,6 +161,13 @@ const Users = () => {
                           >
                             Ордера
                           </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              handleOpenAction("balances", user);
+                            }}
+                          >
+                            Балансы
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -181,6 +187,11 @@ const Users = () => {
             close={handleCloseAction}
           />
           <SeeOrdersDrawer
+            data={dataSelected}
+            open={openPopUp}
+            close={handleCloseAction}
+          />
+          <BalancesDrawer
             data={dataSelected}
             open={openPopUp}
             close={handleCloseAction}

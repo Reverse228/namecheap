@@ -18,9 +18,7 @@ const Header: FC<Props> = ({ secondBalance }) => {
 
   const { data: userData, status } = useGetMe();
 
-  const balance = userData?.assetBalances
-    ? `${userData.assetBalances.find(({ currency }) => currency === "USD")?.balance}`
-    : "0.00";
+  const balance = `${userData?.assetBalances.find(({ currency }) => currency === "USD")?.balance ?? "0.00"}`;
 
   const secondCurrency =
     searchParams.get("pair") && searchParams.get("pair")?.split("-")[0];

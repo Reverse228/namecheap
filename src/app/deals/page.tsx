@@ -41,8 +41,8 @@ const Deals = () => {
     Array.from(searchParams.entries()),
   );
 
-  const { status: userStatus } = useGetMe();
-  const { data: ordersData, status: orderStatus } = useGetOrders();
+  const { status: userStatus, data: userData } = useGetMe();
+  const { data: ordersData, status: orderStatus } = useGetOrders(userData?.id);
 
   const [filteredData, setFilteredData] = useState<DataType[] | undefined>(
     undefined,
@@ -111,7 +111,7 @@ const Deals = () => {
             <TabsTrigger
               value={"open"}
               onClick={() => handleType("open")}
-              disabled={orderStatus !== "success"}
+              disabled={orderStatus === "loading"}
               className={"gap-2"}
             >
               <PackageOpen size={16} /> Открытые сделки
@@ -119,7 +119,7 @@ const Deals = () => {
             <TabsTrigger
               value={"close"}
               onClick={() => handleType("close")}
-              disabled={orderStatus !== "success"}
+              disabled={orderStatus === "loading"}
               className={"gap-2"}
             >
               <Package size={16} /> Зактрыктые сделки

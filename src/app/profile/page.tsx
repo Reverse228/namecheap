@@ -128,13 +128,15 @@ const Page = () => {
                     Главный счет (USD)
                   </Label>
                   <Label className={"text-base"}>
-                    {mainBalance?.balance} {mainBalance?.currency}
+                    {mainBalance?.balance ?? "0.00"}{" "}
+                    {mainBalance?.currency ?? "USD"}
                   </Label>
                 </div>
                 <div className={"flex items-center justify-between"}>
                   <Label className={"text-muted-foreground"}>Замороженно</Label>
                   <Label>
-                    {mainBalance?.frozenBalance} {mainBalance?.currency}
+                    {mainBalance?.frozenBalance ?? "0.00"}{" "}
+                    {mainBalance?.currency ?? "USD"}
                   </Label>
                 </div>
                 {restBalances?.length ? (

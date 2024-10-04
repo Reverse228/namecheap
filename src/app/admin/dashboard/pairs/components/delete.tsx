@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { AdminPairsActions } from "@/utils/types";
 import { FC } from "react";
+import { useDeletePairs } from "@/api/adminApi";
 
 type Props = {
   data:
@@ -25,6 +26,14 @@ type Props = {
 };
 
 const DeleteAlert: FC<Props> = ({ open, close, data }) => {
+  const { executeMutation: deletePair, status } = useDeletePairs();
+
+  const handleDelete = () => {
+    console.log(data);
+
+    data && deletePair(data);
+  };
+
   return (
     <AlertDialog open={open === "delete"} onOpenChange={close}>
       <AlertDialogContent>
@@ -40,7 +49,9 @@ const DeleteAlert: FC<Props> = ({ open, close, data }) => {
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Отмена</AlertDialogCancel>
-              <AlertDialogAction>Удалить</AlertDialogAction>
+              <AlertDialogAction onClick={handleDelete}>
+                Удалить
+              </AlertDialogAction>
             </AlertDialogFooter>
           </>
         ) : (

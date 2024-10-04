@@ -23,6 +23,7 @@ import { usePostPairs } from "@/api/adminApi";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useToast } from "@/components/ui/use-toast";
 import { IsSubmittedObject } from "@/utils/functions/compareObjects";
+import { PostPairsApi } from "@/api/adminApi/PostPair";
 
 type Props = {
   children: ReactNode;
@@ -41,10 +42,17 @@ const CreateDialog: FC<Props> = ({ children }) => {
   const { toast } = useToast();
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<Form>();
-  const onSubmit: SubmitHandler<Form> = (data) => {
-    const sendData = {
-      ...data,
-      lastPrice: Number(data.lastPrice),
+  const onSubmit: SubmitHandler<Form> = ({
+    baseCurrency,
+    quoteCurrency,
+    type,
+    lastPrice,
+  }) => {
+    const sendData: PostPairsApi = {
+      baseCurrency,
+      quoteCurrency,
+      type,
+      lastPrice: Number(lastPrice),
     };
 
     postPair(sendData);
@@ -55,10 +63,6 @@ const CreateDialog: FC<Props> = ({ children }) => {
     if (postPairStatus === "success") {
       toast({
         description: "Новая пара создана!",
-      });
-    } else if (postPairStatus === "loading") {
-      toast({
-        description: <LoadingSpinner />,
       });
     } else if (postPairStatus === "error") {
       toast({
@@ -126,8 +130,13 @@ const CreateDialog: FC<Props> = ({ children }) => {
             <DialogClose asChild>
               <Button variant={"secondary"}>Отмена</Button>
             </DialogClose>
-            <Button type={"submit"} disabled={IsSubmittedObject(watch())}>
-              Создать
+            <Button
+              type={"submit"}
+              disabled={
+                IsSubmittedObject(watch()) || postPairStatus === "loading"
+              }
+            >
+              {postPairStatus === "loading" ? <LoadingSpinner /> : "Создать"}
             </Button>
           </DialogFooter>
         </form>

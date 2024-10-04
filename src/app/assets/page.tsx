@@ -101,7 +101,7 @@ const Assets = () => {
               label={"чтобы иметь возможность торговать активыми"}
               userStatus={userStatus}
             />
-            <div className={"flex gap-4"}>
+            <div className={"flex gap-2"}>
               <Command className={"border *:border-b-0 w-full"}>
                 <CommandInput
                   placeholder="Поиск активов"
@@ -115,7 +115,7 @@ const Assets = () => {
                 defaultValue={"all"}
                 onValueChange={(value) => setFilter(value)}
               >
-                <SelectTrigger className={"w-3/12 min-w-16 h-[46px]"}>
+                <SelectTrigger className={"w-3/12 min-w-20 h-[46px]"}>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -133,7 +133,7 @@ const Assets = () => {
                 <Label
                   className={"text-muted-foreground text-xl text-center mt-6"}
                 >
-                  Не найдено активов с таким названием
+                  Не найдено не одного актива
                 </Label>
               ) : (
                 (filteredPair ?? pairs)?.map(
